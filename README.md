@@ -2,12 +2,16 @@
 
 Dirty tricks to run python notebooks
 
+![package-test-badge](https://github.com/alexandreCameron/boar/workflows/package-test.yaml/badge.svg)
+
 ## Purpose
 
-Sometimes testing an idea is easierly done but calling a python notebook in a python code.
-
-It is a bad practice for production environments ...
-
+Testing an idea is sometimes more easily done by calling a python notebook in a python code.
+It is practice as dirty, filthy and ugly as a boar...
 But if you can prove the value of your idea, why not trying it out.
 
-It's a dirty, filthy ugly like a boar but boars are not an endangered species.
+## Practice
+
+I used this trick in CI jobs to make sure tutorials associated to a project stay up-to-date.
+
+I would not recommend to use this code on a deployed product.
