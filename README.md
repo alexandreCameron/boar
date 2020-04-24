@@ -2,7 +2,11 @@
 
 Dirty tricks to run python notebooks
 
-![package-test-badge](https://github.com/alexandreCameron/boar/workflows/.github/workflows/package-test.yaml/badge.svg)
+![test](https://github.com/alexandreCameron/boar/workflows/test/badge.svg)
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
+[![made-with-sphinx-doc](https://img.shields.io/badge/Made%20with-Sphinx-1f425f.svg)](https://www.sphinx-doc.org/)
 
 ## Purpose
 
