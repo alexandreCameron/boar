@@ -1,2 +1,6 @@
 -r test.txt
-
+ipython==7.13.0
+jupyter==1.0.0
+matplotlib==3.2.1
+numpy==1.18.3
+pytest-cov==2.8.1

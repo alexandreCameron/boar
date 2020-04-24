@@ -1,6 +1,6 @@
 # boar
 
-Dirty tricks to execute python notebooks
+Dirty tricks to run python notebooks
 
 ## Purpose
 
