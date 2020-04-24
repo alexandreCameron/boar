@@ -5,22 +5,14 @@ help: ## Help recipies listing all the recipies of Makefile
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/##//'
 .PHONY: help
 
-# Install
-# -------
+# Install python
+# --------------
 
-install:  ## Install python dependencies on azure feed or pypi repo
+install-python:  ## Install python dependencies on azure feed or pypi repo
 	@echo "+++install:"
 	${PIP} install --no-cache-dir -r requirements/${ENV_REQUIREMENTS}.txt
 	${PIP} install --no-cache-dir -e .
 .PHONY: install
-
-destroy-docker:  ## Destroy containers, volumes, networks and images
-	@echo "+++docker-destroy:"
-	docker container prune -fy
-	docker volume prune -f
-	docker network prune -f
-	docker image prune -f
-.PHONY: destroy-docker
 
 # Commitlint
 # ----------
@@ -44,15 +36,28 @@ commitlint:  ## Launch commitlint
 # Markdown lint
 # -------------
 
-install-markdown-lint:
+install-markdownlint:
 	@echo "+++install-markdown-lint:"
 	npm install -g markdownlint-cli
 .PHONY: install-markdown-lint
 
-markdown-lint:
+markdownlint:
 	@echo "+++markdown-lint:"
 	markdownlint '**/*.md' --config .markdownlint.json
 .PHONY: markdown-lint
+
+
+# ============
+# Python tests
+# ============
+
+# Lint
+# ----
+
+test-flake8:  ## Launch python linter
+	@echo "+++test-flake8:"
+	flake8 ${PROJECT_PATH} ${TEST_PATH} ${NOTEBOOK_TEST_PATH} *.py
+.PHONY: test-flake8
 
 # Doc
 # ---
@@ -62,22 +67,8 @@ build-doc:  ##  Build python documentation using sphinx
 	sphinx-build -Wb html ${DOC_PATH} ${DOC_PATH}/.build
 .PHONY: build-doc
 
-zip-doc:  ## Zip documentation for windows users in plant
-	@echo "+++zip-doc:"
-	${MAKE} build-doc
-	zip doc.zip doc
-.PHONY: zip-doc
-
-# Test
-# ----
-
-# Tests pytest
-# ------------
-
-test-flake8:  ## Launch python linter
-	@echo "+++test-flake8:"
-	flake8 ${PROJECT_PATH} ${TEST_PATH} ${NOTEBOOK_TEST_PATH} *.py
-.PHONY: test-flake8
+# Unit tests
+# ----------
 
 test-pytest:  ## Launch python tests
 	@echo "+++test-pytest-ut:"

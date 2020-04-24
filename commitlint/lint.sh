@@ -11,16 +11,20 @@ if [ $branch_name = "master" ]
 then
     echo "Master branch detected"
     exit 0
-elif $(echo $branch_name | grep -Evq "^(feature-|bugfix-|hotfix-|release-|renovate-|renovate/)")
+elif $(echo $branch_name | grep -Evq "^(feature-|bugfix-|hotfix-|release-|renovate-)")
 then
     echo "Wrong branch name, please use feature-, bugfix-, hotfix- or release- as prefix $branch_name"
     exit 1
 fi
 
+# Fetch other branch in order to compare branch with master
+git fetch
+
 #Check messages convention
 if [ $2 = "local" ]; then
     commitlint --config commitlint/commitlint.config.js --to $(git rev-parse $branch_name) --from $(git rev-parse origin/master)
 elif [ $2 = "cloud" ]; then
+    echo commitlint --config commitlint/commitlint.config.js --to $(git rev-parse origin/$branch_name) --from $(git rev-parse origin/master)
     commitlint --config commitlint/commitlint.config.js --to $(git rev-parse origin/$branch_name) --from $(git rev-parse origin/master)
 else
     echo $2 condition not defined
