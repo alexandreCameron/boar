@@ -2,7 +2,6 @@
 
 Dirty tricks to execute python notebooks
 
-
 ## Purpose
 
 Sometimes testing an idea is easierly done but calling a python notebook in a python code.

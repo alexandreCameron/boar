@@ -76,7 +76,7 @@ zip-doc:  ## Zip documentation for windows users in plant
 
 test-flake8:  ## Launch python linter
 	@echo "+++test-flake8:"
-	flake8 ${ENGINE_PATH} ${TEST_PATH} ${NOTEBOOK_TEST_PATH}
+	flake8 ${PROJECT_PATH} ${TEST_PATH} ${NOTEBOOK_TEST_PATH}
 .PHONY: test-flake8
 
 test-pytest:  ## Launch python tests
