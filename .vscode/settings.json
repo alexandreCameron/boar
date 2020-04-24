@@ -1,0 +1,15 @@
+{
+    "python.pythonPath": "boar-venv/bin/python3.8",
+    "python.linting.enabled": true,
+    "python.linting.pycodestyleEnabled": true,
+    "python.linting.pycodestyleArgs": ["--max-line-length=100"],
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Path": ".flake8",
+    "files.watcherExclude": {
+	".git/**": true,
+	"data/**": true,
+	"**venv/**": true,
+	"**egg-info/**": true,	
+	"junit/**": true
+  }
+}

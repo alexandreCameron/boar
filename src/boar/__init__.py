@@ -1,0 +1,6 @@
+from pathlib import Path
+
+init_path = Path(__file__)
+LIB_PATH = init_path.parents[0]
+ROOT_PATH = init_path.parents[2]
+NOTEBOOK_PATH = Path(ROOT_PATH, "notebook")
