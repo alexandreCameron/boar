@@ -1,0 +1,14 @@
+#Makefile variable
+
+SHELL := /bin/bash
+ENV_REQUIREMENTS ?= dev
+ENV_EXECUTION ?= local
+NOTEBOOK_PATH := ./notebook
+PROJECT_PATH = ./src/boar
+DOC_PATH := ./doc
+TEST_PATH := ./tests
+
+BRANCH_NAME ?= refs/heads/$(shell git rev-parse --abbrev-ref HEAD)
+PYTHON := $(if $(OS),python,python3)
+PYTEST := ${PYTHON} -m pytest -vvv --durations=0 --cov=${PROJECT_PATH}
+PIP := pip
