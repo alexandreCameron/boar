@@ -2,7 +2,7 @@
 
 Dirty tricks to run python notebooks
 
-![package-test-badge](https://github.com/alexandreCameron/boar/workflows/package-test.yaml/badge.svg)
+![package-test-badge](https://github.com/alexandreCameron/boar/workflows/.github/workflows/package-test.yaml/badge.svg)
 
 ## Purpose
 

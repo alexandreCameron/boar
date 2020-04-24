@@ -1,3 +1,5 @@
+name: Package test
+
 on:
   push:
     branches:
