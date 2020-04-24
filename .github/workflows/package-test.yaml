@@ -1,0 +1,43 @@
+name: Package test
+
+on:
+  push:
+    branches:
+      - master
+      - 'feature-**'  
+
+jobs:
+  js-lints:
+    runs-on: ubuntu-latest 
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: Install markdownlint
+        run: make install-markdownlint
+      - name: Markdownlint
+        run: make markdownlint
+      - name: Install commitlint
+        run: make install-commitlint
+      - name: Commintlint
+        run: make commitlint BRANCH_NAME=${GITHUB_REF#refs/heads/} ENV_EXECUTION=cloud
+
+  python-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.x'
+      - name: Install python dependencies
+        run: make install-python ENV_REQUIREMENTS=test
+      - name: Python lint
+        run: make test-flake8
+      - name: Python doc
+        run: make build-doc
+      - name: Python unit tests
+        run: make test-pytest
+    
