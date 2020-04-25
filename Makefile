@@ -86,8 +86,18 @@ tests-pytest:  ## Launch all  python tests
 # Release
 # -------
 
-release:  ## Launch wheel creation
+release:  ## Create wheel
 	@echo "+++release:"
 	sed -i "s/version=\"[0-9].[0-9].[0-9]\"/version=\"${VERSION}\"/g" setup.py
-	${PYTHON} setup.py bdist_wheel
+	${PYTHON} setup.py sdist bdist_wheel
 .PHONY: release
+
+publish-testpypi:  ## Publish package on testpypi
+	@echo "+++publish-testpypi:"
+	${PYTHON} -m twine upload --repository testpypi dist/* --verbose
+.PHONY: publish-testpypi
+
+publish-pypi:  ## Publish package on pypi
+	@echo "+++publish-pypi:"
+	${PYTHON} -m twine upload dist/*
+.PHONY: publish-pypi

@@ -26,6 +26,12 @@ I would not recommend to use this code on a deployed product.
 
 Open [./USAGE.md](./USAGE.md) to view examples on how you can use `boar`.
 
+## [WIP] Installation
+
+`pip install -i https://test.pypi.org/simple/ boar==0.0.0`
+
+[https://test.pypi.org/project/boar/0.0.0/](https://test.pypi.org/project/boar/0.0.0/)
+
 ## [WIP] Documentation
 
 [https://boar.readthedocs.io/en/latest/](https://boar.readthedocs.io/en/latest/)
