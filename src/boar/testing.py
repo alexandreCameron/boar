@@ -1,18 +1,22 @@
-from sys import exc_info
 import json
+from pathlib import Path
+from sys import exc_info
 
 from typing import Tuple, Union
 
 
-def run_notebook(notebook_path: str, verbose: bool) -> None:
+def run_notebook(
+    notebook_path: Union[str, Path],
+    verbose: bool,
+) -> None:
     """Run notebook one cell and one line at a time.
 
     Parameters
     ----------
-    notebook_path : str
+    notebook_path : Union[str, Path]
         Path of notebook
     verbose: bool
-        Option to print more inforamation
+        Option to print more information
     """
     with open(notebook_path, "r") as content_file:
         content = content_file.read()
@@ -41,42 +45,72 @@ def run_notebook(notebook_path: str, verbose: bool) -> None:
 
 
 def get_notebook_error(
-    notebook_path: str,
+    notebook_path: Union[str, Path],
     verbose: bool,
 ) -> Tuple[Union[type, None], Union[str, None]]:
-    error_type = None
-    error_msg = None
+    """Get notebook error.
 
+    Parameters
+    ----------
+    notebook_path : Union[str, Path]
+        Path of notebook
+    verbose: bool
+        Option to print more information
+
+    Returns
+    -------
+    Tuple[Union[type, None], Union[str, None]]
+        error_type: class of error raised
+        error_msg: error message
+    """
+    error_type, error_msg = None, None
     try:
         run_notebook(notebook_path, verbose)
     except (KeyboardInterrupt, Exception):
         error_type, error_msg, _ = exc_info()
-
     return error_type, error_msg
 
 
 def assert_notebook_error(
-    notebook_path: str,
+    notebook_path: Union[str, Path],
     expected_error_type: Union[type, None],
     expected_error_msg: Union[str, None],
     verbose: bool,
 ) -> None:
-    error_type, error_msg = get_notebook_error(notebook_path, verbose)
+    """Assert that notebook raise specific error.
 
-    print(error_type, type(error_type))
-    print(expected_error_type, type(expected_error_type))
+    Parameters
+    ----------
+    notebook_path : Union[str, Path]
+        Path of notebook
+    expected_error_type : Union[type, None]
+        Expected error of the notebook
+    expected_error_msg : Union[str, None]
+        Expected error message of the notebook
+    verbose: bool
+        Option to print more information
+    """
+    error_type, error_msg = get_notebook_error(notebook_path, verbose)
     assert error_type == expected_error_type
 
     if (error_type is None) or (expected_error_msg is None):
         return
-
     assert str(error_msg) == str(expected_error_msg)
 
 
 def check_notebook(
-    notebook_path: str,
+    notebook_path: Union[str, Path],
     verbose: bool,
 ) -> None:
+    """Check that notebook runs without error.
+
+    Parameters
+    ----------
+    notebook_path : Union[str, Path]
+        Path of notebook
+    verbose: bool
+        Option to print more information
+    """
     assert_notebook_error(
         notebook_path=notebook_path,
         expected_error_type=None,

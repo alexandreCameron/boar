@@ -1,10 +1,10 @@
 Boar doc
-==========
+========
 
-RUN NOTEBOOK
+boar.testing
 ------------
 
-.. automodule:: boar
+.. automodule:: boar.testing
    :members:
    :undoc-members:
    :show-inheritance:

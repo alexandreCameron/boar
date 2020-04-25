@@ -25,3 +25,7 @@ I would not recommend to use this code on a deployed product.
 ## Usage
 
 Open [./USAGE.md](./USAGE.md) to view examples on how you can use `boar`.
+
+## [WIP] Documentation
+
+[https://boar.readthedocs.io/en/latest/](https://boar.readthedocs.io/en/latest/)
