@@ -71,8 +71,9 @@ build-doc:  ##  Build python documentation using sphinx
 # ----------
 
 test-pytest:  ## Launch python tests
-	@echo "+++test-pytest-ut:"
-	${PYTEST} ${TEST_PATH}
+	@echo "+++test-pytest:"
+	${PYTEST} ${TEST_PATH} -m "ut"
+	${PYTEST} ${TEST_PATH} -m "e2e"
 .PHONY: test-pytest
 
 tests-pytest:  ## Launch all  python tests

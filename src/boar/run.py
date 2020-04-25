@@ -49,10 +49,8 @@ def get_notebook_error(
 
     try:
         run_notebook(notebook_path, verbose)
-    except Exception as err:
-        exc_type, _, _ = exc_info()
-        error_type = exc_type
-        error_msg = err
+    except (KeyboardInterrupt, Exception):
+        error_type, error_msg, _ = exc_info()
 
     return error_type, error_msg
 
@@ -65,6 +63,8 @@ def assert_notebook_error(
 ) -> None:
     error_type, error_msg = get_notebook_error(notebook_path, verbose)
 
+    print(error_type, type(error_type))
+    print(expected_error_type, type(expected_error_type))
     assert error_type == expected_error_type
 
     if (error_type is None) or (expected_error_msg is None):
