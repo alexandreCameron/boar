@@ -8,6 +8,8 @@ Dirty tricks to run python notebooks
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![made-with-sphinx-doc](https://img.shields.io/badge/Made%20with-Sphinx-1f425f.svg)](https://www.sphinx-doc.org/)
 
+![boar](img/boar.jpg)
+
 ## Purpose
 
 Testing an idea is sometimes more easily done by calling a python notebook in a python code.
