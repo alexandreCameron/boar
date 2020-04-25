@@ -8,7 +8,7 @@ from boar.__init__ import NOTEBOOK_PATH_00
 @pytest.mark.e2e
 def test_check_notebook_runs_without_error() -> None:
     # Given
-    from boar.run import check_notebook
+    from boar.testing import check_notebook
     notebook_path = Path(NOTEBOOK_PATH_00, "OK.ipynb")
     verbose = True
 
@@ -37,7 +37,7 @@ def test_assert_notebook_error_can_detect_error(
     expected_error_type: Union[type, None],
 ) -> None:
     # Given
-    from boar.run import assert_notebook_error
+    from boar.testing import assert_notebook_error
     notebook_path = Path(NOTEBOOK_PATH_00, notebook_name)
     expected_error_msg = ""
     verbose = True
@@ -54,7 +54,7 @@ def test_assert_notebook_error_can_detect_error(
 @pytest.mark.e2e
 def test_assert_notebook_error_can_detect_error_message() -> None:
     # Given
-    from boar.run import assert_notebook_error
+    from boar.testing import assert_notebook_error
     notebook_path = Path(NOTEBOOK_PATH_00, "ValueError-with-message.ipynb")
     error_type = ValueError
     error_msg = "message"
