@@ -143,7 +143,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'boar.tex', 'boar Documentation', 'manual'),
+    (master_doc, 'boar.tex', 'boar Documentation', author, 'manual'),
 ]
 
 
@@ -152,8 +152,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'boar', 'boar Documentation',
-     [author], 1)
+    (master_doc, 'boar', 'boar Documentation', [author], 1)
 ]
 
 
