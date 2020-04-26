@@ -7,7 +7,7 @@ from typing import Tuple, Union
 
 def run_notebook(
     notebook_path: Union[str, Path],
-    verbose: bool,
+    verbose: bool = False,
 ) -> None:
     """Run notebook one cell and one line at a time.
 
@@ -15,8 +15,8 @@ def run_notebook(
     ----------
     notebook_path : Union[str, Path]
         Path of notebook
-    verbose: bool
-        Option to print more information
+    verbose: bool, optional
+        Option to print more information, by default False
     """
     with open(notebook_path, "r") as content_file:
         content = content_file.read()
@@ -54,8 +54,8 @@ def get_notebook_error(
     ----------
     notebook_path : Union[str, Path]
         Path of notebook
-    verbose: bool
-        Option to print more information
+    verbose: bool, optional
+        Option to print more information, by default False
 
     Returns
     -------
@@ -87,8 +87,8 @@ def assert_notebook_error(
         Expected error of the notebook
     expected_error_msg : Union[str, None]
         Expected error message of the notebook
-    verbose: bool
-        Option to print more information
+    verbose: bool, optional
+        Option to print more information, by default False
     """
     error_type, error_msg = get_notebook_error(notebook_path, verbose)
     assert error_type == expected_error_type
@@ -108,8 +108,8 @@ def check_notebook(
     ----------
     notebook_path : Union[str, Path]
         Path of notebook
-    verbose: bool
-        Option to print more information
+    verbose: bool, optional
+        Option to print more information, by default False
     """
     assert_notebook_error(
         notebook_path=notebook_path,
