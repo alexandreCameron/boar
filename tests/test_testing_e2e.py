@@ -32,7 +32,7 @@ def test_check_notebook_runs_without_error() -> None:
     ("ValueError.ipynb", ValueError),
     ("ZeroDivisionError.ipynb", ZeroDivisionError),
 ])
-def test_assert_notebook_error_can_detect_error(
+def test_assert_notebook_error_detects_error(
     notebook_name: str,
     expected_error_type: Union[type, None],
 ) -> None:
@@ -52,7 +52,7 @@ def test_assert_notebook_error_can_detect_error(
 
 
 @pytest.mark.e2e
-def test_assert_notebook_error_can_detect_error_message() -> None:
+def test_assert_notebook_error_detects_error_message() -> None:
     # Given
     from boar.testing import assert_notebook_error
     notebook_path = Path(NOTEBOOK_PATH_00, "ValueError-with-message.ipynb")
