@@ -7,4 +7,3 @@ pytest-cov==2.8.1
 recommonmark==0.6.0
 Sphinx==3.0.2
 sphinx-rtd-theme==0.4.3
-wheel==0.34.2
