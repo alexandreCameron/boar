@@ -6,20 +6,6 @@ from boar.__init__ import NOTEBOOK_PATH_00
 
 
 @pytest.mark.ut
-def test_run_notebook_run_wihtout_error() -> None:
-    # Given
-    from boar.testing import run_notebook
-    notebook_path = Path(NOTEBOOK_PATH_00, "OK.ipynb")
-    verbose = True
-
-    # When / Then
-    run_notebook(
-        notebook_path=notebook_path,
-        verbose=verbose,
-    )
-
-
-@pytest.mark.ut
 @patch("boar.testing.run_notebook")
 def test_get_notebook_error_calls_functions_in_order(
     mock_run_notebook,
