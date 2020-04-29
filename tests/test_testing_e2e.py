@@ -2,14 +2,14 @@ from pathlib import Path
 import pytest
 from typing import Union
 
-from boar.__init__ import NOTEBOOK_PATH_00
+from boar.__init__ import Notebook
 
 
 @pytest.mark.e2e
 def test_check_notebook_runs_without_error() -> None:
     # Given
     from boar.testing import check_notebook
-    notebook_path = Path(NOTEBOOK_PATH_00, "OK.ipynb")
+    notebook_path = Path(Notebook._00.value, "OK.ipynb")
     verbose = True
 
     # When / Then
@@ -38,7 +38,7 @@ def test_assert_notebook_error_detects_error(
 ) -> None:
     # Given
     from boar.testing import assert_notebook_error
-    notebook_path = Path(NOTEBOOK_PATH_00, notebook_name)
+    notebook_path = Path(Notebook._00.value, notebook_name)
     expected_error_msg = ""
     verbose = True
 
@@ -55,7 +55,7 @@ def test_assert_notebook_error_detects_error(
 def test_assert_notebook_error_detects_error_message() -> None:
     # Given
     from boar.testing import assert_notebook_error
-    notebook_path = Path(NOTEBOOK_PATH_00, "ValueError-with-message.ipynb")
+    notebook_path = Path(Notebook._00.value, "ValueError-with-message.ipynb")
     error_type = ValueError
     error_msg = "message"
     verbose = True

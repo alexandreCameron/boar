@@ -3,16 +3,18 @@ from pathlib import Path
 
 from typing import List, Union
 
-import logging
-from boar.__init__ import START_TAG, END_TAG, SELECT_TAG, BoarError
+from boar.__init__ import Tag, BoarError
+from boar.utils.log import (log_execution, close_plots)
+from copy import deepcopy
 
 
 def run_notebook(
     notebook_path: Union[str, Path],
+    inputs: dict = {},
     verbose: Union[bool, object] = False,
-    start_tag: str = START_TAG,
-    end_tag: str = END_TAG,
-    select_tag: str = SELECT_TAG,
+    start_tag: str = Tag.START.value,
+    end_tag: str = Tag.END.value,
+    select_tag: str = Tag.SELECT.value,
 ) -> None:
     """Run notebook one cell and one line at a time.
 
@@ -31,6 +33,7 @@ def run_notebook(
     for cell_index, cell in enumerate(cells):
         # Parse cell lines for execution
         compact_source = parse_lines(cell)
+        print(compact_source)
         log_execution(cell_index, compact_source, verbose=verbose)
 
         # Run, if no export tag
@@ -51,12 +54,29 @@ def run_notebook(
         exec(compact_source)
 
     close_plots()
-    return outputs
+    return deepcopy(outputs)
+
+
+# Parsing
+
+def get_notebook_cells(notebook_path: Union[str, Path]) -> List[str]:
+    with open(notebook_path, "r") as json_stream:
+        content = json.load(json_stream)
+    cells = [cell["source"] for cell in content["cells"] if cell["cell_type"] == "code"]
+    return cells
+
+
+def parse_lines(cell: List[str]) -> str:
+    lines = [line.replace("plt.show()", "plt.draw(); plt.close('all')") for line in cell]
+    sources = [line for line in lines if not (line.startswith("%") or line.startswith("!"))]
+    compact_source = "".join(sources)
+    return compact_source
 
 
 # Line execution
 
 def execute_by_select(compact_source: str, select_tag: str, variables: dict) -> dict:
+    """Implicit update of locals() !!!! But this behavior is wanted."""
     splits = split_lines_with_select_tag(compact_source, select_tag)
 
     diffs = {}
@@ -86,26 +106,10 @@ def split_lines_with_select_tag(
     return splits
 
 
-# Parsing
-
-def get_notebook_cells(notebook_path: Union[str, Path]) -> List[str]:
-    with open(notebook_path, "r") as json_stream:
-        content = json.load(json_stream)
-    cells = [cell["source"] for cell in content["cells"] if cell["cell_type"] == "code"]
-    return cells
-
-
-def parse_lines(cell: List[str]) -> str:
-    lines = [line.replace("plt.show()", "plt.draw(); plt.close('all')") for line in cell]
-    sources = [line for line in lines if not (line.startswith("%") or line.startswith("!"))]
-    compact_source = "".join(sources)
-    return compact_source
-
-
 # Block execution
 
 def execute_by_block(compact_source: str, start_tag: str, end_tag: str, variables: dict) -> dict:
-    """Implicit update for locals() !!!! But this behavior is wanted"""
+    """Implicit update of locals() !!!! But this behavior is wanted."""
     start_split = split_lines_with_block_tag(compact_source, start_tag)
     end_split = split_lines_with_block_tag(start_split[1], end_tag)
 
@@ -114,7 +118,6 @@ def execute_by_block(compact_source: str, start_tag: str, end_tag: str, variable
     exec(end_split[0], variables)
     diffs = {key: variables[key] for key in set(variables) - set(temp) if key != "temp"}
     exec(end_split[1], variables)
-
     return diffs
 
 
@@ -135,34 +138,3 @@ def split_lines_with_block_tag(
         msg = f"Multiple `{tag}` in:\n{source_to_split}"
         raise BoarError(msg)
     return splits
-
-
-# Cosmetic
-
-def log_execution(
-    cell_index: int,
-    compact_source: str,
-    verbose: Union[bool, object],
-) -> None:
-    logger_print = (lambda x: None)
-    if isinstance(verbose, bool):
-        logger_print = print if verbose else logging.info
-    elif isinstance(verbose, object):
-        logger_print = verbose
-    else:
-        msg = f"Undefined verbose: `{verbose}`."
-        raise BoarError(msg)
-
-    logger_print(50*"-")
-    logger_print(f"Cell {cell_index}")
-    logger_print(50*"-")
-    logger_print(compact_source)
-    logger_print("\n")
-
-
-def close_plots():
-    try:
-        exec("plt.close('all')")
-    except NameError:
-        logging.debug("Notebook does not use matplotlib")
-        pass
