@@ -2,7 +2,7 @@ from pathlib import Path
 import pytest
 from unittest.mock import patch, call, Mock
 
-from boar.__init__ import NOTEBOOK_PATH_00
+from boar.__init__ import Notebook
 
 
 @pytest.mark.ut
@@ -12,7 +12,7 @@ def test_get_notebook_error_calls_functions_in_order(
 ) -> None:
     # Given
     from boar.testing import get_notebook_error
-    notebook_path = Path(NOTEBOOK_PATH_00, "OK.ipynb")
+    notebook_path = Path(Notebook._00.value, "OK.ipynb")
     expected_error_type = None
     expected_error_msg = None
     verbose = True
@@ -43,7 +43,7 @@ def test_assert_notebook_error_calls_functions_in_order(
 ) -> None:
     # Given
     from boar.testing import assert_notebook_error
-    notebook_path = Path(NOTEBOOK_PATH_00, "OK.ipynb")
+    notebook_path = Path(Notebook._00.value, "OK.ipynb")
     expected_error_type = None
     expected_error_msg = None
     verbose = True
@@ -75,7 +75,7 @@ def test_check_notebook_calls_functions_in_order(
 ) -> None:
     # Given
     from boar.testing import check_notebook
-    notebook_path = Path(NOTEBOOK_PATH_00, "OK.ipynb")
+    notebook_path = Path(Notebook._00.value, "OK.ipynb")
     expected_error_type = None
     expected_error_msg = None
     verbose = True
