@@ -14,7 +14,7 @@ class Tag(Enum):
     START = "export_start"
     END = "export_end"
     SELECT = "export_line"
-    SKIP = "execution_skip"
+    SKIP = "execution_skip_line"
 
 
 class Notebook(Enum):

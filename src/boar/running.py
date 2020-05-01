@@ -28,6 +28,9 @@ def run_notebook(
     # Parse json
     cells = get_notebook_cells(notebook_path)
 
+    # Run set new inputs
+    locals().update(inputs)
+
     # Run Code
     outputs = {}
     for cell_index, cell in enumerate(cells):
