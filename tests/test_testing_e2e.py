@@ -62,3 +62,14 @@ def test_assert_notebook_error_detects_error_message() -> None:
 
     # When / Then
     assert_notebook_error(notebook_path, error_type, error_msg, verbose)
+
+
+@pytest.mark.e2e
+def test_tuto_runs_without_error() -> None:
+    # Given
+    from boar.testing import check_notebook
+    notebook_path = Path(Notebook.MAIN.value, "00-test-tutorial.ipynb")
+    verbose = True
+
+    # When / Then
+    check_notebook(notebook_path, verbose)
