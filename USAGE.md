@@ -1,21 +1,33 @@
 # Usage
 
-## Using `boar` for notebook test
+## Testing
 
 A simple way to test your notebook is to follow the test:
 
 ```python
-def test_check_notebook_runs_without_error() -> None:
+def test_check_notebook_runs_without_error():
     # Given
     from boar.testing import check_notebook
-    notebook_path = Path(NOTEBOOK_PATH, "my_favorite.ipynb")
-    verbose = True
 
     # When / Then
-    check_notebook(notebook_path, verbose)
+    check_notebook("my_favorite.ipynb", verbose=True)
 ```
 
-Other tests are presented at: [./tests/test_run_e2e.py](./tests/test_run_e2e.py)
+Other examples are presented at: [./tests/test_testing_e2e.py](./tests/test_testing_e2e.py)
+
+## Running
+
+A simple way to run a notebook is to use:
+
+```python
+from boar.running import run_notebook
+
+outputs = run_notebook("my_favorite.ipynb")
+```
+
+The outputs can be defined in the notebook by adding `# export_line` for a line or `# export_start` and `# export_end`.
+
+Other examples are presented in: [./notebook/01-test-tutorial.ipynb](./notebook/01-test-tutorial.ipynb)
 
 ## Caveat
 
@@ -24,6 +36,8 @@ Other tests are presented at: [./tests/test_run_e2e.py](./tests/test_run_e2e.py)
 2. Only python code can be executed, donnot try to use the package on notebook with julia or R.
 
 3. When executing a notebook via `boar` make sure the environment has all the package to run the notebook.
+
+4. The package has not been developped to work recursively. Use at your own risk.
 
 ## Forbidden synthax
 
