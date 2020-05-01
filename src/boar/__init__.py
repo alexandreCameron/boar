@@ -25,3 +25,12 @@ class Notebook(Enum):
 
 class BoarError(Exception):
     pass
+
+
+def get_raw_exec():
+    raw_exec = {}
+    exec("", raw_exec)
+    return raw_exec
+
+
+EXCEPTION_KEYS = list(get_raw_exec().keys())

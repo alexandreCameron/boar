@@ -3,7 +3,7 @@ from pathlib import Path
 
 from typing import List, Union, Dict
 
-from boar.__init__ import Tag, BoarError
+from boar.__init__ import Tag, BoarError, EXCEPTION_KEYS
 from boar.utils.log import (log_execution, close_plots)
 from copy import deepcopy
 
@@ -147,9 +147,30 @@ def execute_python(
     diffs = {}
     for split in splits:
         if split["export"]:
-            temp = dict(variables)
+            __boar_very_special_temp = make_very_special(variables)
         exec(split["code"], variables)
         if split["export"]:
-            diff = {key: variables[key] for key in set(variables) - set(temp) if key != "temp"}
+            __boar_very_special_vars = make_very_special(variables)
+            diff = get_dict_diff(__boar_very_special_vars, __boar_very_special_temp)
             diffs.update(diff)
     return diffs
+
+
+def make_very_special(a_dict: dict) -> dict:
+    special_dict = {
+        key: value for key, value in a_dict.items()
+        if (key not in EXCEPTION_KEYS) and not key.startswith("__boar_very_special_")
+    }
+    return special_dict
+
+
+def get_dict_diff(a_dict: dict, b_dict: dict) -> dict:
+    diff = {}
+    for key, value in a_dict.items():
+        if key not in b_dict.keys():
+            diff[key] = value
+            continue
+        if value != b_dict[key]:
+            diff[key] = value
+            continue
+    return diff
