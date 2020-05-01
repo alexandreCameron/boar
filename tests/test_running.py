@@ -92,12 +92,12 @@ def test_split_lines_by_block_calls_functions_in_order(
 
 @pytest.mark.ut
 @pytest.mark.parametrize("source_to_split,expected_splits", [
-    (f"a\nb\n#{Tag.START.value}\nc",
-     [f"a\nb\n#{Tag.START.value}", f"c"]),
-    (f"a\nb\n#{Tag.START.value}",
-     [f"a\nb\n#{Tag.START.value}", f""]),
-    (f"#{Tag.START.value}\na\nb",
-     [f"#{Tag.START.value}", f"a\nb"]),
+    (f"a\nb\n#{Tag.EXPORT_START.value}\nc",
+     [f"a\nb\n#{Tag.EXPORT_START.value}", f"c"]),
+    (f"a\nb\n#{Tag.EXPORT_START.value}",
+     [f"a\nb\n#{Tag.EXPORT_START.value}", f""]),
+    (f"#{Tag.EXPORT_START.value}\na\nb",
+     [f"#{Tag.EXPORT_START.value}", f"a\nb"]),
 ])
 def test_split_lines_with_block_tag_returns_correct_values(
     source_to_split: str,
@@ -105,7 +105,7 @@ def test_split_lines_with_block_tag_returns_correct_values(
 ) -> None:
     # Given
     from boar.running import split_lines_with_block_tag
-    start_tag = Tag.START.value
+    start_tag = Tag.EXPORT_START.value
 
     # When
     splits = split_lines_with_block_tag(source_to_split, start_tag)
@@ -118,13 +118,13 @@ def test_split_lines_with_block_tag_returns_correct_values(
 @pytest.mark.ut
 @pytest.mark.parametrize("source_to_split,expected_splits", [
     (f"a", [{'code': 'a', 'export': False}]),
-    (f"b #{Tag.SELECT.value}",
+    (f"b #{Tag.EXPORT_LINE.value}",
      [{'code': '', 'export': False},
-      {'code': f'b #{Tag.SELECT.value}', 'export': True},
+      {'code': f'b #{Tag.EXPORT_LINE.value}', 'export': True},
       {'code': '', 'export': False}]),
-    (f"a\nb #{Tag.SELECT.value}\nc",
+    (f"a\nb #{Tag.EXPORT_LINE.value}\nc",
      [{'code': 'a', 'export': False},
-      {'code': f'b #{Tag.SELECT.value}', 'export': True},
+      {'code': f'b #{Tag.EXPORT_LINE.value}', 'export': True},
       {'code': 'c', 'export': False}]),
 ])
 def test_split_lines_with_select_tag_returns_correct_value(
@@ -133,7 +133,7 @@ def test_split_lines_with_select_tag_returns_correct_value(
 ) -> None:
     # Given
     from boar.running import split_lines_with_select_tag
-    select_tag = Tag.SELECT.value
+    select_tag = Tag.EXPORT_LINE.value
 
     # When
     splits = split_lines_with_select_tag(source_to_split, select_tag)

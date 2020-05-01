@@ -27,7 +27,7 @@ def get_notebook_error(
     """
     error_type, error_msg = None, None
     try:
-        _ = run_notebook(notebook_path, verbose)
+        _ = run_notebook(notebook_path, verbose=verbose)
     except (KeyboardInterrupt, Exception):
         error_type, error_msg, _ = exc_info()
     return error_type, error_msg
