@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from enum import EnumMeta
 
 from typing import List, Union, Dict
 
@@ -12,9 +13,7 @@ def run_notebook(
     notebook_path: Union[str, Path],
     inputs: dict = {},
     verbose: Union[bool, object] = False,
-    start_tag: str = Tag.EXPORT_START.value,
-    end_tag: str = Tag.EXPORT_END.value,
-    select_tag: str = Tag.EXPORT_LINE.value,
+    Tag: EnumMeta = Tag,
 ) -> None:
     """Run notebook one cell and one line at a time.
 
@@ -39,21 +38,41 @@ def run_notebook(
         log_execution(cell_index, compact_source, verbose=verbose)
 
         # Run, if no export tag
-        if (start_tag in compact_source) and (select_tag in compact_source):
-            msg = f"`{start_tag}` and `{select_tag}` cannot be in same cell."
+        if (Tag.EXPORT.value not in compact_source) and (Tag.SKIP.value not in compact_source):
+            exec(compact_source)
+            continue
+
+        # Raise error if too different tag type
+        if (Tag.EXPORT.value in compact_source) and (Tag.SKIP.value in compact_source):
+            msg = f"`{Tag.EXPORT.value}*` and `{Tag.EXPORT.value}*` cannot be in same cell."
             raise BoarError(msg)
 
+        # Define tags
+        if (Tag.EXPORT.value in compact_source):
+            start_tag = Tag.EXPORT_START.value
+            end_tag = Tag.EXPORT_END.value
+            line_tag = Tag.EXPORT_LINE.value
+
+        if (Tag.SKIP.value in compact_source):
+            start_tag = Tag.SKIP_START.value
+            end_tag = Tag.SKIP_END.value
+            line_tag = Tag.SKIP_LINE.value
+
+        # Raise error if incompatible extension
+        if (start_tag in compact_source) and (line_tag in compact_source):
+            msg = f"`{start_tag}` and `{line_tag}` cannot be in same cell."
+            raise BoarError(msg)
+
+        # Executre python code
         if start_tag in compact_source:
             diffs = execute_by_block(compact_source, start_tag, end_tag, locals())
             outputs.update(diffs)
             continue
 
-        if select_tag in compact_source:
-            diffs = execute_by_line(compact_source, select_tag, locals())
+        if line_tag in compact_source:
+            diffs = execute_by_line(compact_source, line_tag, locals())
             outputs.update(diffs)
             continue
-
-        exec(compact_source)
 
     close_plots()
     return deepcopy(outputs)
@@ -82,13 +101,14 @@ def split_lines_by_block(
     start_tag: str,
     end_tag: str,
 ) -> List[Dict[str, Union[str, bool]]]:
+    tag_type = start_tag.split("_")[0].split("# ")[1]
     start_splits = split_lines_with_block_tag(source_to_split, start_tag)
     end_splits = split_lines_with_block_tag(start_splits[1], end_tag)
 
     splits = [
-        {"code": start_splits[0], "export": False},
-        {"code": end_splits[0], "export": True},
-        {"code": end_splits[1], "export": False},
+        {"code": start_splits[0], "type": tag_type, "apply": False},
+        {"code": end_splits[0], "type": tag_type, "apply": True},
+        {"code": end_splits[1], "type": tag_type, "apply": False},
     ]
     return splits
 
@@ -112,19 +132,20 @@ def split_lines_with_block_tag(
     return block_splits
 
 
-def split_lines_with_select_tag(
+def split_lines_with_line_tag(
     source_to_split: str,
     tag: str,
 ) -> List[Dict[str, Union[str, bool]]]:
+    tag_type = tag.split("_")[0].split("# ")[1]
     splits, block = [], []
     for line in source_to_split.split("\n"):
         if tag in line:
-            splits.append({"code": "\n".join(block), "export": False})
-            splits.append({"code": line, "export": True})
+            splits.append({"code": "\n".join(block), "type": tag_type, "apply": False})
+            splits.append({"code": line, "type": tag_type, "apply": True})
             block = []
             continue
         block.append(line)
-    splits.append({"code": "\n".join(block), "export": False})
+    splits.append({"code": "\n".join(block), "type": tag_type, "apply": False})
     return splits
 
 
@@ -136,9 +157,9 @@ def execute_by_block(compact_source: str, start_tag: str, end_tag: str, variable
     return execute_python(splits, variables)
 
 
-def execute_by_line(compact_source: str, select_tag: str, variables: dict) -> dict:
+def execute_by_line(compact_source: str, line_tag: str, variables: dict) -> dict:
     """Implicit update of locals() !!!! But this behavior is wanted."""
-    splits = split_lines_with_select_tag(compact_source, select_tag)
+    splits = split_lines_with_line_tag(compact_source, line_tag)
     return execute_python(splits, variables)
 
 
@@ -149,10 +170,13 @@ def execute_python(
     """Implicit update of locals() !!!! But this behavior is wanted."""
     diffs = {}
     for split in splits:
-        if split["export"]:
+        if (split["type"] == "skip") and split["apply"]:
+            continue
+
+        if (split["type"] == "export") and split["apply"]:
             __VeRyYyY_sPecIAl_temp = make_special(variables)
         exec(split["code"], variables)
-        if split["export"]:
+        if (split["type"] == "export") and split["apply"]:
             __VeRyYyY_sPecIAl_vars = make_special(variables)
             diff = get_dict_diff(__VeRyYyY_sPecIAl_vars, __VeRyYyY_sPecIAl_temp)
             diffs.update(diff)
