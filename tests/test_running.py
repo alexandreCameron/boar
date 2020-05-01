@@ -217,14 +217,14 @@ def test_execute_by_line_return_correct_values(
     ([{"code": "a=1\na=2", "export": True}], {'a': 2}),
     ([{"code": "a=1\nb=2", "export": True}], {'a': 1, 'b': 2}),
 ])
-def test_execute_by_line_return_correct_values_2(
+def test_execute_python_return_correct_values(
     splits: List[Dict[str, str]],
     expected_diffs: dict,
 ):
     # Given
     from boar.running import execute_python
-    variables = {}
-    exec("", variables)
+    from boar.__init__ import get_raw_exec
+    variables = get_raw_exec()
 
     # When
     diffs = execute_python(splits, variables)
