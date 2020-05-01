@@ -2,7 +2,7 @@ from pathlib import Path
 import pytest
 from unittest.mock import patch, call, Mock
 
-from typing import Union, List, Dict
+from typing import Union, List, Dict, Any
 
 from boar.__init__ import Tag, Notebook
 
@@ -211,6 +211,50 @@ def test_execute_by_line_return_correct_values(
 
 
 @pytest.mark.ut
+@patch("boar.running.get_dict_diff")
+@patch("boar.running.make_special")
+@pytest.mark.parametrize("export", [True, False])
+def test_execute_python_call_functions_in_order(
+    mock_make_special,
+    mock_get_dict_diff,
+    export: bool,
+):
+    # Given
+    from boar.running import execute_python
+    variables = {}
+    splits = [{"code": "a=1", "export": export}]
+    __VeRyYyY_sPecIAl_temp = {}
+    __VeRyYyY_sPecIAl_vars = {"a": 1}
+    diff = {"a": 1}
+    if export:
+        expected_diffs = {**diff}
+    else:
+        expected_diffs = {}
+
+    # Thus
+    mock_manager = Mock()
+    mock_manager.attach_mock(mock_make_special, "mock_make_special")
+    mock_manager.attach_mock(mock_get_dict_diff, "mock_get_dict_diff")
+    mock_make_special.side_effect = [__VeRyYyY_sPecIAl_temp, __VeRyYyY_sPecIAl_vars]
+    mock_get_dict_diff.return_value = diff
+    if export:
+        expected_function_calls = [
+            call.mock_make_special(variables),
+            call.mock_make_special(variables),
+            call.mock_get_dict_diff(__VeRyYyY_sPecIAl_vars, __VeRyYyY_sPecIAl_temp),
+        ]
+    else:
+        expected_function_calls = []
+
+    # When
+    diffs = execute_python(splits, variables)
+
+    # Then
+    assert diffs == expected_diffs
+    assert mock_manager.mock_calls == expected_function_calls
+
+
+@pytest.mark.ut
 @pytest.mark.parametrize("splits,expected_diffs", [
     ([{"code": "", "export": True}], {}),
     ([{"code": "a=1", "export": True}], {'a': 1}),
@@ -223,11 +267,52 @@ def test_execute_python_return_correct_values(
 ):
     # Given
     from boar.running import execute_python
-    from boar.__init__ import get_raw_exec
-    variables = get_raw_exec()
+    variables = {}
 
     # When
     diffs = execute_python(splits, variables)
 
     # Then
     assert diffs == expected_diffs
+
+
+@pytest.mark.ut
+@pytest.mark.parametrize("a_dict,expected_diff", [
+    ({"a": 1}, {"a": 1}),
+    ({"__VeRyYyY_sPecIAl_a": 1}, {}),
+    ({"a": 1, "__VeRyYyY_sPecIAl_a": 1}, {"a": 1})
+])
+def test_make_special_return_correct_values(
+    a_dict: Dict[str, Any],
+    expected_diff: dict,
+):
+    # Given
+    from boar.running import make_special
+
+    # When
+    diff = make_special(a_dict)
+
+    # Then
+    assert diff == expected_diff
+
+
+@pytest.mark.ut
+@pytest.mark.parametrize("a_dict,b_dict,expected_diff", [
+    ({"a": 1}, {}, {"a": 1}),
+    ({"a": 1}, {"a": 1}, {}),
+    ({"a": 2}, {"a": 1}, {"a": 2}),
+    ({"a": 1, "b": 2}, {"a": 1}, {"b": 2}),
+])
+def test_get_dict_diff_return_correct_values(
+    a_dict: dict,
+    b_dict: dict,
+    expected_diff: dict,
+):
+    # Given
+    from boar.running import get_dict_diff
+
+    # When
+    diff = get_dict_diff(a_dict, b_dict)
+
+    # Then
+    assert diff == expected_diff

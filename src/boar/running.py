@@ -147,19 +147,21 @@ def execute_python(
     diffs = {}
     for split in splits:
         if split["export"]:
-            __boar_very_special_temp = make_very_special(variables)
+            __VeRyYyY_sPecIAl_temp = make_special(variables)
         exec(split["code"], variables)
         if split["export"]:
-            __boar_very_special_vars = make_very_special(variables)
-            diff = get_dict_diff(__boar_very_special_vars, __boar_very_special_temp)
+            __VeRyYyY_sPecIAl_vars = make_special(variables)
+            diff = get_dict_diff(__VeRyYyY_sPecIAl_vars, __VeRyYyY_sPecIAl_temp)
             diffs.update(diff)
     return diffs
 
 
-def make_very_special(a_dict: dict) -> dict:
+# Utils
+
+def make_special(a_dict: dict) -> dict:
     special_dict = {
         key: value for key, value in a_dict.items()
-        if (key not in EXCEPTION_KEYS) and not key.startswith("__boar_very_special_")
+        if (key not in EXCEPTION_KEYS) and not key.startswith("__VeRyYyY_sPecIAl_")
     }
     return special_dict
 
