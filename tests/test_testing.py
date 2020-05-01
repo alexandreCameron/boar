@@ -22,7 +22,7 @@ def test_get_notebook_error_calls_functions_in_order(
     mock_manager.attach_mock(mock_run_notebook, "mock_run_notebook")
     mock_run_notebook.return_value = None
     expected_function_calls = [
-        call.mock_run_notebook(notebook_path, verbose),
+        call.mock_run_notebook(notebook_path, verbose=verbose),
     ]
 
     # When

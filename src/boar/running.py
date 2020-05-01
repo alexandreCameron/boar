@@ -12,9 +12,9 @@ def run_notebook(
     notebook_path: Union[str, Path],
     inputs: dict = {},
     verbose: Union[bool, object] = False,
-    start_tag: str = Tag.START.value,
-    end_tag: str = Tag.END.value,
-    select_tag: str = Tag.SELECT.value,
+    start_tag: str = Tag.EXPORT_START.value,
+    end_tag: str = Tag.EXPORT_END.value,
+    select_tag: str = Tag.EXPORT_LINE.value,
 ) -> None:
     """Run notebook one cell and one line at a time.
 

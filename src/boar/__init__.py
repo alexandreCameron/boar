@@ -11,10 +11,10 @@ TESTS_PATH = Path(ROOT_PATH, "tests")
 # Tags
 
 class Tag(Enum):
-    START = "export_start"
-    END = "export_end"
-    SELECT = "export_line"
-    SKIP = "execution_skip_line"
+    EXPORT_START = "export_start"
+    EXPORT_END = "export_end"
+    EXPORT_LINE = "export_line"
+    SKIP_LINE = "skip_line"
 
 
 class Notebook(Enum):
