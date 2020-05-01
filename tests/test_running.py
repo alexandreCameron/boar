@@ -18,9 +18,9 @@ from boar.__init__ import Tag, Notebook
       ['outputs_0 = {\n', '    "a" : 0\n', '}\n', '# export_start\n',
        'outputs_1 = {\n', '    "b" : BBB\n', '}\n', '# export_end\n',
        'outputs_2 = {\n', '    "c" : 2\n', '}'], ['c = 2'],
-      ['"export_start"\n', 'outputs_3 = {\n', '    "d" : DDD(1)\n', '}\n',
-       '"export_end"'],
-      ['outputs_4 = {"e": EEE}\n', 'outputs_5 = {"f": FFF} # export_line\n',
+      ['# export_start\n', 'outputs_3 = {\n', '    "d" : DDD(1)\n', '}\n',
+       '# export_end'],
+      ['outputs_4 = {"e": EEE}\n', 'outputs_5 = {"f": FFF}  # export_line\n',
        'outputs_6 = {"g": GGG}']]),
 ])
 def test_get_notebook_cells_returns_correct_values(
@@ -117,26 +117,26 @@ def test_split_lines_with_block_tag_returns_correct_values(
 
 @pytest.mark.ut
 @pytest.mark.parametrize("source_to_split,expected_splits", [
-    (f"a", [{'code': 'a', 'export': False}]),
-    (f"b #{Tag.EXPORT_LINE.value}",
-     [{'code': '', 'export': False},
-      {'code': f'b #{Tag.EXPORT_LINE.value}', 'export': True},
-      {'code': '', 'export': False}]),
-    (f"a\nb #{Tag.EXPORT_LINE.value}\nc",
-     [{'code': 'a', 'export': False},
-      {'code': f'b #{Tag.EXPORT_LINE.value}', 'export': True},
-      {'code': 'c', 'export': False}]),
+    (f"a", [{'apply': False, 'code': 'a', 'type': 'export'}]),
+    (f"b {Tag.EXPORT_LINE.value}",
+     [{'apply': False, 'code': '', 'type': 'export'},
+      {'apply': True, 'code': f'b {Tag.EXPORT_LINE.value}', 'type': 'export'},
+      {'apply': False, 'code': '', 'type': 'export'}]),
+    (f"a\nb {Tag.EXPORT_LINE.value}\nc",
+     [{'apply': False, 'code': 'a', 'type': 'export'},
+      {'apply': True, 'code': f'b {Tag.EXPORT_LINE.value}', 'type': 'export'},
+      {'apply': False, 'code': 'c', 'type': 'export'}]),
 ])
-def test_split_lines_with_select_tag_returns_correct_value(
+def test_split_lines_with_line_tag_returns_correct_value(
     source_to_split: str,
     expected_splits: List[Dict[str, Union[str, bool]]],
 ) -> None:
     # Given
-    from boar.running import split_lines_with_select_tag
-    select_tag = Tag.EXPORT_LINE.value
+    from boar.running import split_lines_with_line_tag
+    line_tag = Tag.EXPORT_LINE.value
 
     # When
-    splits = split_lines_with_select_tag(source_to_split, select_tag)
+    splits = split_lines_with_line_tag(source_to_split, line_tag)
 
     # Then
     assert splits == expected_splits
@@ -153,7 +153,7 @@ def test_execute_by_block_return_correct_values(
     from boar.running import execute_by_block
     compact_source = ""
     start_tag, end_tag = "", ""
-    splits = [{"code": "", "export": False}]
+    splits = [{"code": "", "type": "export", "apply": False}]
     expected_diffs = {}
     variables = {}
 
@@ -178,32 +178,32 @@ def test_execute_by_block_return_correct_values(
 
 @pytest.mark.ut
 @patch("boar.running.execute_python")
-@patch("boar.running.split_lines_with_select_tag")
+@patch("boar.running.split_lines_with_line_tag")
 def test_execute_by_line_return_correct_values(
-    mock_split_lines_with_select_tag,
+    mock_split_lines_with_line_tag,
     mock_execute_python,
 ):
     # Given
     from boar.running import execute_by_line
     compact_source = ""
-    select_tag = ""
-    splits = [{"code": "", "export": False}]
+    line_tag = ""
+    splits = [{"code": "", "type": "export", "apply": False}]
     expected_diffs = {}
     variables = {}
 
     # Thus
     mock_manager = Mock()
-    mock_manager.attach_mock(mock_split_lines_with_select_tag, "mock_split_lines_with_select_tag")
+    mock_manager.attach_mock(mock_split_lines_with_line_tag, "mock_split_lines_with_line_tag")
     mock_manager.attach_mock(mock_execute_python, "mock_execute_python")
-    mock_split_lines_with_select_tag.return_value = splits
+    mock_split_lines_with_line_tag.return_value = splits
     mock_execute_python.return_value = expected_diffs
     expected_function_calls = [
-        call.mock_split_lines_with_select_tag(compact_source, select_tag),
+        call.mock_split_lines_with_line_tag(compact_source, line_tag),
         call.mock_execute_python(splits, variables),
     ]
 
     # When
-    diffs = execute_by_line(compact_source, select_tag, variables)
+    diffs = execute_by_line(compact_source, line_tag, variables)
 
     # Then
     assert mock_manager.mock_calls == expected_function_calls
@@ -222,7 +222,7 @@ def test_execute_python_call_functions_in_order(
     # Given
     from boar.running import execute_python
     variables = {}
-    splits = [{"code": "a=1", "export": export}]
+    splits = [{"code": "a=1", "type": "export", "apply": export}]
     __VeRyYyY_sPecIAl_temp = {}
     __VeRyYyY_sPecIAl_vars = {"a": 1}
     diff = {"a": 1}
@@ -256,10 +256,10 @@ def test_execute_python_call_functions_in_order(
 
 @pytest.mark.ut
 @pytest.mark.parametrize("splits,expected_diffs", [
-    ([{"code": "", "export": True}], {}),
-    ([{"code": "a=1", "export": True}], {'a': 1}),
-    ([{"code": "a=1\na=2", "export": True}], {'a': 2}),
-    ([{"code": "a=1\nb=2", "export": True}], {'a': 1, 'b': 2}),
+    ([{"code": "", "type": "export", "apply": True}], {}),
+    ([{"code": "a=1", "type": "export", "apply": True}], {'a': 1}),
+    ([{"code": "a=1\na=2", "type": "export", "apply": True}], {'a': 2}),
+    ([{"code": "a=1\nb=2", "type": "export", "apply": True}], {'a': 1, 'b': 2}),
 ])
 def test_execute_python_return_correct_values(
     splits: List[Dict[str, str]],
