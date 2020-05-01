@@ -15,23 +15,70 @@ def test_check_notebook_runs_without_error():
 
 Other examples are presented at: [./tests/test_testing_e2e.py](./tests/test_testing_e2e.py)
 
+---
+
 ## Running
+
+### Synthax
 
 A simple way to run a notebook is to use:
 
 ```python
 from boar.running import run_notebook
 
-outputs = run_notebook("my_favorite.ipynb")
+outputs = run_notebook("my_favorite.ipynb", inputs={"a": 1}, verbose=True)
 ```
 
-The outputs can be defined in the notebook by adding `# export_line` for a line or `# export_start` and `# export_end`.
+### Export
+
+The outputs are defined in the notebook by adding
+
+* `# export_line` for a line
+* `# export_start` and `# export_end` for a block.
 
 Other examples are presented in: [./notebook/01-test-tutorial.ipynb](./notebook/01-test-tutorial.ipynb)
+.
+
+### Skip
+
+Section of the notebook can be skip using the keywords:
+
+* `# skip_line` for a line
+* `# skip_start` and `# skip_end` for a block.
+
+### Inputs
+
+Inputs variables can be execute before the notebook using the `inputs` parameter of the `run_notebook` function.
+
+Combined with the skip option, inputs allow run a notebook for differents parameters.
+
+### Example
+
+If you have a variable in you notebook defined as:
+
+```python
+data_file = "my_data_file.csv"  # skip_line
+```
+
+and an input dictionary defined as:
+
+```python
+inputs = {"data_file": "data_file_1.csv"}
+```
+
+The skip option will prevent the code from executing `data_file = "my_data_file.csv"`.
+
+The input parameter will set `data_file = "data_file_1.csv"`.
+
+This is not the best way to put code in production but it can help out in some occasions.
+
+---
 
 ## Caveat
 
-1. On the graphic package `matplotlib.pyplot` as been test. Use other graphic option at your on risk
+### Usage limits
+
+1. Only the graphic package `matplotlib.pyplot` as been tested. Use other graphic option at your on risk.
 
 2. Only python code can be executed, donnot try to use the package on notebook with julia or R.
 
@@ -39,7 +86,7 @@ Other examples are presented in: [./notebook/01-test-tutorial.ipynb](./notebook/
 
 4. The package has not been developped to work recursively. Use at your own risk.
 
-## Forbidden synthax
+### Forbidden synthax
 
 Some synthax used in notebook can **not** be used with `boar`:
 
