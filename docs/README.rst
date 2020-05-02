@@ -35,12 +35,7 @@ Dirty tricks to run python notebooks
 
 
 
-
-.. image:: https://github.com/alexandreCameron/boar/blob/master/img/boar.jpg
-   :target: https://github.com/alexandreCameron/boar/blob/master/img/boar.jpg
-   :alt: ./img/boar.jpg
-
-
+`./img/boar.jpg <https://github.com/alexandreCameron/boar/blob/master/img/boar.jpg>`_
 
 Purpose
 -------

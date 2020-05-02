@@ -8,7 +8,7 @@ Table of content
 
    README.rst
    USAGE.rst
-   boar-doc.rst
+   boar-man.rst
 
 Index
 =====

@@ -70,7 +70,7 @@ build-doc:  ##  Build python documentation using sphinx
 	@echo "+++build-doc:"
 	${MAKE} convert-md2rst FILE="USAGE"
 	${MAKE} convert-md2rst FILE="README"
-	sphinx-build -Wb html ${DOC_PATH} ${DOC_PATH}/.build
+	sphinx-build -T -E -b readthedocs -d ${DOC_PATH}/.build/doctrees-readthedocs -D language=en ${DOC_PATH}/ ${DOC_PATH}/.build/html
 .PHONY: build-doc
 
 # Unit tests

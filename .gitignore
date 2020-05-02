@@ -1,6 +1,6 @@
 # Custom
 boar-venv
-doc/.build
+docs/.build
 
 # Notebook
 notebook/**/Untitled*.ipynb

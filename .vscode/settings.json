@@ -16,7 +16,7 @@
     ".pytest_cache/**": true,
     ".coverage": true,
     "build/**": true,
-    "doc/.build/**": true,
+    "docs/.build/**": true,
     "dist/**": true,
     "junit/**": true
   }
