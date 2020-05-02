@@ -22,8 +22,24 @@ def run_notebook(
     ----------
     notebook_path : Union[str, Path]
         Path of notebook
+    inputs : dict, optional
+        Parameter to set before launching the script, by default {}
     verbose: Union[bool, object], optional
         Option to print more information, by default False
+    Tag : EnumMeta, optional
+        Name of the tags, by default Tag
+
+    Returns
+    -------
+    dict
+        Outputs to return if `export`-tags set in notebook
+
+    Raises
+    ------
+    BoarError
+        If `export*` and `skip*` tags in the same cell
+    BoarError
+        If `*start` and `*line` tags in the same cell
     """
     # Parse json
     cells = get_notebook_cells(notebook_path)

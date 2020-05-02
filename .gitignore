@@ -2,6 +2,9 @@
 boar-venv
 doc/.build
 
+# Notebook
+notebook/**/Untitled*.ipynb
+
 # Emacs
 *~
 **freeze.txt
