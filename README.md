@@ -9,7 +9,7 @@ Dirty tricks to run python notebooks
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![made-with-sphinx-doc](https://img.shields.io/badge/Made%20with-Sphinx-1f425f.svg)](https://www.sphinx-doc.org/)
 
-[![./img/boar.jpg](https://github.com/alexandreCameron/boar/blob/master/img/boar.jpg)](https://github.com/alexandreCameron/boar/blob/master/img/boar.jpg)
+[./img/boar.jpg](https://github.com/alexandreCameron/boar/blob/master/img/boar.jpg)
 
 ## Purpose
 

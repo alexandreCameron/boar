@@ -5,6 +5,7 @@ pep8==1.7.1
 pylint==2.4.4
 pytest==5.4.1
 pytest-cov==2.8.1
+readthedocs-sphinx-ext==1.0.3
 recommonmark==0.6.0
 Sphinx==3.0.2
 sphinx-rtd-theme==0.4.3

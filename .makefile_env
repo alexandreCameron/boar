@@ -5,7 +5,7 @@ ENV_REQUIREMENTS ?= dev
 ENV_EXECUTION ?= local
 NOTEBOOK_PATH := ./notebook
 PROJECT_PATH = ./src/boar
-DOC_PATH := ./doc
+DOC_PATH := ./docs
 TEST_PATH := ./tests
 
 BRANCH_NAME ?= refs/heads/$(shell git rev-parse --abbrev-ref HEAD)
