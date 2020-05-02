@@ -13,7 +13,7 @@ def test_check_notebook_runs_without_error():
     check_notebook("my_favorite.ipynb", verbose=True)
 ```
 
-Other examples are presented at: [./tests/test_testing_e2e.py](./tests/test_testing_e2e.py)
+Other examples are presented at: [./tests/test_testing_e2e.py](https://github.com/alexandreCameron/boar/blob/master/tests/test_testing_e2e.py)
 
 ---
 
@@ -36,8 +36,7 @@ The outputs are defined in the notebook by adding
 * `# export_line` for a line
 * `# export_start` and `# export_end` for a block.
 
-Other examples are presented in: [./notebook/01-test-tutorial.ipynb](./notebook/01-test-tutorial.ipynb)
-.
+Other examples are presented in: [./notebook/01-test-tutorial.ipynb](https://github.com/alexandreCameron/boar/blob/master/notebook/01-io-tutorial.ipynb)
 
 ### Skip
 
@@ -74,77 +73,73 @@ This is not the best way to put code in production but it can help out in some o
 
 ---
 
-## Caveat
+## Caveats
 
-### Usage limits
+### Limits
 
-1. Only the graphic package `matplotlib.pyplot` as been tested. Use other graphic option at your on risk.
+* Only the graphic package `matplotlib.pyplot` as been tested. Use other graphic option at your on risk.
 
-2. Only python code can be executed, donnot try to use the package on notebook with julia or R.
+* Only python code can be executed, donnot try to use the package on notebook with julia or R.
 
-3. When executing a notebook via `boar` make sure the environment has all the package to run the notebook.
+* When executing a notebook via `boar` make sure the environment has all the package to run the notebook.
 
-4. The package has not been developped to work recursively. Use at your own risk.
+* The package has not been developped to work recursively. Use at your own risk.
 
 ### Forbidden synthax
 
 Some synthax used in notebook can **not** be used with `boar`:
 
-1. Magic command starting with `%%`, `!` or any command that cannot be used in a python file.
+* Magic command starting with `%%`, `!` or any command that cannot be used in a python file.
 
-2. Variable, list, dictionary comprehension.
+* Variable, list, dictionary comprehension.
 
-    This synthax will **fail**:
+```python
+# This synthax will **fail**
+b = [a for a in range(10) if a > 3]
+```
 
-    ```python
-    b = [a for a in range(10) if a > 3]
-    ```
+```python
+# This synthax will **pass**
+b = []
+for a in range(10):
+    if a > 3:
+        b.append(a)
+```
 
-    This synthax will **pass**:
+* Function calls for functions defined within the notebook scope.
 
-    ```python
-    b = []
-    for a in range(10):
-        if a > 3:
-            b.append(a)
-    ```
+```python
+# This synthax will **fail**
+def f2(a):
+    return a**2
 
-3. Function calls for functions defining in the notebook scope.
+def f2plus1(a):
+    return f2(a) +1
+```
 
-    This synthax will **fail**:
-
-    ```python
+```python
+# This synthax will **pass**
+def f2plus1(a):
     def f2(a):
         return a**2
+    return f2(a) +1
+```
 
-    def f2plus1(a):
-        return f2(a) +1
-    ```
+* Package imports in the notebook scope.
 
-    This synthax will **pass**:
+```python
+# This synthax will **fail**
+import numpy as np
 
-    ```python
-    def f2plus1(a):
-        def f2(a):
-            return a**2
-        return f2(a) +1
-    ```
+def f2plus1(a):
+    return np.square(a) +1
+```
 
-4. Package imports in the notebook scope.
-
-    This synthax will **fail**:
-
-    ```python
+```python
+# This synthax will **pass**
+def f2plus1(a):
     import numpy as np
+    return np.square(a) +1
+```
 
-    def f2plus1(a):
-        return np.square(a) +1
-    ```
-
-    This synthax will **pass**:
-
-    ```python
-    def f2plus1(a):
-        import numpy as np
-        return np.square(a) +1
-    ```
+* Use of `export` or `skip` tags in a indented section.

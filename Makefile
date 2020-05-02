@@ -43,7 +43,7 @@ install-markdownlint:
 
 markdownlint:
 	@echo "+++markdown-lint:"
-	markdownlint '**/*.md' --config .markdownlint.json
+	markdownlint '*.md' --config .markdownlint.json
 .PHONY: markdown-lint
 
 
@@ -62,8 +62,14 @@ test-flake8:  ## Launch python linter
 # Doc
 # ---
 
+convert-md2rst:  ## Convert markdown to rst for the doc
+	m2r --overwrite ${FILE}.md ${FILE}.rst && mv ${FILE}.rst ${DOC_PATH}
+.PHONY: convert-md2rst
+
 build-doc:  ##  Build python documentation using sphinx
 	@echo "+++build-doc:"
+	${MAKE} convert-md2rst FILE="USAGE"
+	${MAKE} convert-md2rst FILE="README"
 	sphinx-build -Wb html ${DOC_PATH} ${DOC_PATH}/.build
 .PHONY: build-doc
 
@@ -88,6 +94,7 @@ tests-pytest:  ## Launch all  python tests
 
 release:  ## Create wheel
 	@echo "+++release:"
+	rm ./dist/*
 	sed -i "s/version=\"[0-9].[0-9].[0-9]\"/version=\"${VERSION}\"/g" setup.py
 	${PYTHON} setup.py sdist bdist_wheel
 .PHONY: release

@@ -1,4 +1,5 @@
 import setuptools
+from version import RELEASE
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -10,7 +11,7 @@ with open("requirements/prod.txt") as fh:
 
 setuptools.setup(
     name="boar",
-    version="0.0.0",
+    version=RELEASE,
     author="Alexandre Cameron",
     author_email="lexcam@hotmail.fr",
     description=short_description,
