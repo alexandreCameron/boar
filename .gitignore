@@ -1,6 +1,7 @@
 # Custom
 boar-venv
-docs/.build
+docs/README.rst
+docs/USAGE.rst
 
 # Notebook
 notebook/**/Untitled*.ipynb
@@ -81,6 +82,7 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+docs/.build/
 
 # PyBuilder
 target/

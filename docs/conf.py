@@ -19,9 +19,54 @@
 #
 import os
 import sys
+
+from pathlib import Path
+import m2r
+
 sys.path.insert(0, os.path.abspath('..'))
 
-from version import VERSION, RELEASE
+from version import VERSION, RELEASE  # noqa
+
+
+# -- Parse markdown to rst ------------------------------------------------
+
+
+def get_root_path(module_name: str = "boar") -> Path:
+    mandatory_items = [
+        "pytest.ini", "LICENSE", "tests", "requirements", "Makefile", ".flake8",
+        ".github", "setup.py", "version.py", "USAGE.md", ".markdownlint.json",
+        "README.md", ".vscode", "docs", ".gitignore", "commitlint", ".makefile_env",
+        "img", ".readthedocs.yml", "notebook", "src",
+    ]
+
+    parts = []
+    for part in Path.cwd().parts:
+        parts.append(part)
+        sub_paths = {item.name for item in Path(*parts).iterdir()}
+        if set(mandatory_items).issubset(sub_paths):
+            break
+    return Path(*parts)
+
+
+def export_md_in_rst(frad, export_subdir="docs"):
+    root_path = get_root_path()
+    fmd = Path(root_path, f"{frad}.md")
+    frst = Path(root_path, export_subdir, f"{frad}.rst")
+    rst_str = m2r.parse_from_file(fmd)
+
+    if frst.exists():
+        frst.unlink()
+
+    with open(frst, "w+") as rst_stream:
+        rst_stream.write(rst_str)
+
+    with open(frst, "r") as rst_stream:
+        rst_str_new = rst_stream.read()
+    return rst_str_new
+
+
+_ = export_md_in_rst(frad="README")
+_ = export_md_in_rst(frad="USAGE")
 
 
 # -- General configuration ------------------------------------------------
@@ -125,35 +170,6 @@ html_sidebars = {
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'boardoc'
-
-
-# # -- Options for LaTeX output ---------------------------------------------
-
-# latex_elements = {
-#     # The paper size ('letterpaper' or 'a4paper').
-#     #
-#     # 'papersize': 'letterpaper',
-
-#     # The font size ('10pt', '11pt' or '12pt').
-#     #
-#     # 'pointsize': '10pt',
-
-#     # Additional stuff for the LaTeX preamble.
-#     #
-#     # 'preamble': '',
-
-#     # Latex figure (float) alignment
-#     #
-#     # 'figure_align': 'htbp',
-# }
-
-# # Grouping the document tree into LaTeX files. List of tuples
-# # (source start file, target name, title,
-# #  author, documentclass [howto, manual, or own class]).
-# latex_documents = [
-#     (master_doc, 'boar.tex', 'boar documentation', author, 'manual'),
-# ]
-
 
 # -- Options for manual page output ---------------------------------------
 
