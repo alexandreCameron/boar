@@ -6,7 +6,7 @@ from typing import Tuple, Union
 from boar.running import run_notebook
 
 
-def get_notebook_error(
+def get_error_notebook(
     notebook_path: Union[str, Path],
     verbose: bool,
 ) -> Tuple[Union[type, None], Union[str, None]]:
@@ -33,7 +33,7 @@ def get_notebook_error(
     return error_type, error_msg
 
 
-def assert_notebook_error(
+def assert_error_notebook(
     notebook_path: Union[str, Path],
     expected_error_type: Union[type, None],
     expected_error_msg: Union[str, None],
@@ -52,7 +52,7 @@ def assert_notebook_error(
     verbose: bool, optional
         Option to print more information, by default False
     """
-    error_type, error_msg = get_notebook_error(notebook_path, verbose)
+    error_type, error_msg = get_error_notebook(notebook_path, verbose)
     print(error_type, error_msg)
     assert error_type == expected_error_type
 
@@ -61,7 +61,7 @@ def assert_notebook_error(
     assert str(error_msg) == str(expected_error_msg)
 
 
-def check_notebook(
+def assert_notebook(
     notebook_path: Union[str, Path],
     verbose: bool,
 ) -> None:
@@ -74,7 +74,7 @@ def check_notebook(
     verbose: bool, optional
         Option to print more information, by default False
     """
-    assert_notebook_error(
+    assert_error_notebook(
         notebook_path=notebook_path,
         expected_error_type=None,
         expected_error_msg=None,

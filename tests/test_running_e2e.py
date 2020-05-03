@@ -54,14 +54,3 @@ def test_run_notebook_skips_line_and_used_inputs(
 
     # Then
     assert outputs == expected_outputs
-
-
-@pytest.mark.e2e
-def test_tuto_runs_without_error() -> None:
-    # Given
-    from boar.testing import check_notebook
-    notebook_path = Path(Notebook.MAIN.value, "01-io-tutorial.ipynb")
-    verbose = True
-
-    # When / Then
-    check_notebook(notebook_path, verbose)

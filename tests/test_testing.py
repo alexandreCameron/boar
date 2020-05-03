@@ -7,11 +7,11 @@ from boar.__init__ import Notebook
 
 @pytest.mark.ut
 @patch("boar.testing.run_notebook")
-def test_get_notebook_error_calls_functions_in_order(
+def test_get_error_notebook_calls_functions_in_order(
     mock_run_notebook,
 ) -> None:
     # Given
-    from boar.testing import get_notebook_error
+    from boar.testing import get_error_notebook
     notebook_path = Path(Notebook._00.value, "OK.ipynb")
     expected_error_type = None
     expected_error_msg = None
@@ -26,7 +26,7 @@ def test_get_notebook_error_calls_functions_in_order(
     ]
 
     # When
-    error_type, error_msg = get_notebook_error(
+    error_type, error_msg = get_error_notebook(
         notebook_path=notebook_path,
         verbose=verbose,
     )
@@ -37,12 +37,12 @@ def test_get_notebook_error_calls_functions_in_order(
 
 
 @pytest.mark.ut
-@patch("boar.testing.get_notebook_error")
-def test_assert_notebook_error_calls_functions_in_order(
-    mock_get_notebook_error,
+@patch("boar.testing.get_error_notebook")
+def test_assert_error_notebook_calls_functions_in_order(
+    mock_get_error_notebook,
 ) -> None:
     # Given
-    from boar.testing import assert_notebook_error
+    from boar.testing import assert_error_notebook
     notebook_path = Path(Notebook._00.value, "OK.ipynb")
     expected_error_type = None
     expected_error_msg = None
@@ -50,14 +50,14 @@ def test_assert_notebook_error_calls_functions_in_order(
 
     # Thus
     mock_manager = Mock()
-    mock_manager.attach_mock(mock_get_notebook_error, "mock_get_notebook_error")
-    mock_get_notebook_error.return_value = (expected_error_type, expected_error_msg)
+    mock_manager.attach_mock(mock_get_error_notebook, "mock_get_error_notebook")
+    mock_get_error_notebook.return_value = (expected_error_type, expected_error_msg)
     expected_function_calls = [
-        call.mock_get_notebook_error(notebook_path, verbose),
+        call.mock_get_error_notebook(notebook_path, verbose),
     ]
 
     # When
-    assert_notebook_error(
+    assert_error_notebook(
         notebook_path=notebook_path,
         expected_error_type=expected_error_type,
         expected_error_msg=expected_error_msg,
@@ -69,12 +69,12 @@ def test_assert_notebook_error_calls_functions_in_order(
 
 
 @pytest.mark.ut
-@patch("boar.testing.assert_notebook_error")
-def test_check_notebook_calls_functions_in_order(
-    mock_assert_notebook_error,
+@patch("boar.testing.assert_error_notebook")
+def test_assert_notebook_calls_functions_in_order(
+    mock_assert_error_notebook,
 ) -> None:
     # Given
-    from boar.testing import check_notebook
+    from boar.testing import assert_notebook
     notebook_path = Path(Notebook._00.value, "OK.ipynb")
     expected_error_type = None
     expected_error_msg = None
@@ -82,10 +82,10 @@ def test_check_notebook_calls_functions_in_order(
 
     # Thus
     mock_manager = Mock()
-    mock_manager.attach_mock(mock_assert_notebook_error, "mock_assert_notebook_error")
-    mock_assert_notebook_error.return_value = (expected_error_type, expected_error_msg)
+    mock_manager.attach_mock(mock_assert_error_notebook, "mock_assert_error_notebook")
+    mock_assert_error_notebook.return_value = (expected_error_type, expected_error_msg)
     expected_function_calls = [
-        call.mock_assert_notebook_error(
+        call.mock_assert_error_notebook(
             notebook_path=notebook_path,
             expected_error_type=expected_error_type,
             expected_error_msg=expected_error_msg,
@@ -94,7 +94,7 @@ def test_check_notebook_calls_functions_in_order(
     ]
 
     # When
-    check_notebook(
+    assert_notebook(
         notebook_path=notebook_path,
         verbose=verbose,
     )

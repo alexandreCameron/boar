@@ -6,14 +6,14 @@ from boar.__init__ import Notebook
 
 
 @pytest.mark.e2e
-def test_check_notebook_runs_without_error() -> None:
+def test_assert_notebook_runs_without_error() -> None:
     # Given
-    from boar.testing import check_notebook
+    from boar.testing import assert_notebook
     notebook_path = Path(Notebook._00.value, "OK.ipynb")
     verbose = True
 
     # When / Then
-    check_notebook(notebook_path, verbose)
+    assert_notebook(notebook_path, verbose)
 
 
 @pytest.mark.e2e
@@ -32,18 +32,18 @@ def test_check_notebook_runs_without_error() -> None:
     ("ValueError.ipynb", ValueError),
     ("ZeroDivisionError.ipynb", ZeroDivisionError),
 ])
-def test_assert_notebook_error_detects_error(
+def test_assert_error_notebook_detects_error(
     notebook_name: str,
     expected_error_type: Union[type, None],
 ) -> None:
     # Given
-    from boar.testing import assert_notebook_error
+    from boar.testing import assert_error_notebook
     notebook_path = Path(Notebook._00.value, notebook_name)
     expected_error_msg = ""
     verbose = True
 
     # When / Then
-    assert_notebook_error(
+    assert_error_notebook(
         notebook_path=notebook_path,
         expected_error_type=expected_error_type,
         expected_error_msg=expected_error_msg,
@@ -52,24 +52,24 @@ def test_assert_notebook_error_detects_error(
 
 
 @pytest.mark.e2e
-def test_assert_notebook_error_detects_error_message() -> None:
+def test_assert_error_notebook_detects_error_message() -> None:
     # Given
-    from boar.testing import assert_notebook_error
+    from boar.testing import assert_error_notebook
     notebook_path = Path(Notebook._00.value, "ValueError-with-message.ipynb")
     error_type = ValueError
     error_msg = "message"
     verbose = True
 
     # When / Then
-    assert_notebook_error(notebook_path, error_type, error_msg, verbose)
+    assert_error_notebook(notebook_path, error_type, error_msg, verbose)
 
 
 @pytest.mark.e2e
 def test_tuto_runs_without_error() -> None:
     # Given
-    from boar.testing import check_notebook
+    from boar.testing import assert_notebook
     notebook_path = Path(Notebook.MAIN.value, "00-test-tutorial.ipynb")
     verbose = True
 
     # When / Then
-    check_notebook(notebook_path, verbose)
+    assert_notebook(notebook_path, verbose)
