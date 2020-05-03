@@ -2,7 +2,7 @@
 
 ## Testing
 
-A simple way to test your notebook is to follow the test:
+To test your notebook follow:
 
 ```python
 def test_assert_notebook_runs_without_error():
@@ -17,11 +17,34 @@ Other examples are presented at: [./tests/test_testing_e2e.py](https://github.co
 
 ---
 
+## Linting
+
+If plots are drawn in notebooks, it is not recommended to commit them to the repo.
+Therefore, `boar` considers notebook-linting as making sure no data is saved in the notebooks.
+The function is designed to raise an error when outputs have not been clear.
+The error will indicate the notebook and the cells at fault.
+
+To lint a notebook (or recursively on all notebooks in a directory), use:
+
+```python
+from boar.linting import lint_notebook
+lint_notebook("my_favorite.ipynb", verbose=True)
+```
+
+```python
+from boar.linting import lint_notebook
+lint_notebook("my_notebook_directory", verbose=True)
+```
+
+Other examples are presented at: [./notebook/02-lint-tutorial.ipynb](https://github.com/alexandreCameron/boar/blob/master/notebook/02-lint-tutorial.ipynb)
+
+---
+
 ## Running
 
 ### Synthax
 
-A simple way to run a notebook is to use:
+To run a notebook use:
 
 ```python
 from boar.running import run_notebook
@@ -36,7 +59,7 @@ The outputs are defined in the notebook by adding
 * `# export_line` for a line
 * `# export_start` and `# export_end` for a block.
 
-Other examples are presented in: [./notebook/01-test-tutorial.ipynb](https://github.com/alexandreCameron/boar/blob/master/notebook/01-io-tutorial.ipynb)
+Examples are presented at: [./notebook/01-test-tutorial.ipynb](https://github.com/alexandreCameron/boar/blob/master/notebook/01-io-tutorial.ipynb)
 
 ### Skip
 
@@ -53,7 +76,7 @@ Combined with the skip option, inputs allow run a notebook for differents parame
 
 ### Example
 
-If you have a variable in you notebook defined as:
+If a variable in a notebook is defined as:
 
 ```python
 data_file = "my_data_file.csv"  # skip_line
