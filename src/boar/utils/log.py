@@ -6,7 +6,7 @@ from boar.__init__ import BoarError
 
 def log_execution(
     cell_index: int,
-    compact_source: str,
+    source_to_exec: str,
     verbose: Union[bool, object],
 ) -> None:
     logger_print = (lambda x: None)
@@ -21,7 +21,7 @@ def log_execution(
     logger_print(50*"-")
     logger_print(f"Cell {cell_index}")
     logger_print(50*"-")
-    logger_print(compact_source)
+    logger_print(source_to_exec)
     logger_print("\n")
 
 

@@ -4,15 +4,15 @@ from boar.utils.split import (split_lines_by_block, split_lines_with_line_tag)
 from boar.__init__ import EXCEPTION_KEYS
 
 
-def execute_by_block(compact_source: str, start_tag: str, end_tag: str, variables: dict) -> dict:
+def execute_by_block(source_to_exec: str, start_tag: str, end_tag: str, variables: dict) -> dict:
     """Implicit update of locals() !!!! But this behavior is wanted."""
-    splits = split_lines_by_block(compact_source, start_tag, end_tag)
+    splits = split_lines_by_block(source_to_exec, start_tag, end_tag)
     return execute_python(splits, variables)
 
 
-def execute_by_line(compact_source: str, line_tag: str, variables: dict) -> dict:
+def execute_by_line(source_to_exec: str, line_tag: str, variables: dict) -> dict:
     """Implicit update of locals() !!!! But this behavior is wanted."""
-    splits = split_lines_with_line_tag(compact_source, line_tag)
+    splits = split_lines_with_line_tag(source_to_exec, line_tag)
     return execute_python(splits, variables)
 
 
