@@ -1,9 +1,36 @@
 from pathlib import Path
 import pytest
+from unittest.mock import patch, call, Mock
 
 from typing import Union, List
 
 from boar.__init__ import Notebook
+
+
+
+@pytest.mark.ut
+@patch("boar.utils.parse.parse_codes")
+def test_parse_sources_calls_functions_in_order(mock_parse_codes) -> None:
+    # Given
+    from boar.utils.parse import parse_sources
+    expected_sources = []
+    notebook_path = "my_favorite_notebook.ipynb"
+    key = "source"
+
+    # Thus
+    mock_manager = Mock()
+    mock_manager.attach_mock(mock_parse_codes, "mock_parse_codes")
+    mock_parse_codes.return_value = expected_sources
+    expected_function_calls = [
+        call.mock_parse_codes(notebook_path, key=key),
+    ]
+
+    # When
+    sources = parse_sources(notebook_path)
+
+    # Then
+    assert mock_manager.mock_calls == expected_function_calls
+    assert sources == expected_sources
 
 
 @pytest.mark.ut
@@ -22,15 +49,16 @@ from boar.__init__ import Notebook
       ['outputs_4 = {"e": EEE}\n', 'outputs_5 = {"f": FFF}  # export_line\n',
        'outputs_6 = {"g": GGG}']]),
 ])
-def test_parse_sources_returns_correct_values(
+def test_parse_codes_returns_correct_values(
     notebook_path: Union[str, Path],
     expected_sources: List[str],
 ) -> None:
     # Given
-    from boar.utils.parse import parse_sources
+    from boar.utils.parse import parse_codes
+    key = "source"
 
     # When
-    sources = parse_sources(notebook_path)
+    sources = parse_codes(notebook_path, key=key)
 
     # Then
     assert sources == expected_sources
