@@ -5,12 +5,12 @@
 A simple way to test your notebook is to follow the test:
 
 ```python
-def test_check_notebook_runs_without_error():
+def test_assert_notebook_runs_without_error():
     # Given
-    from boar.testing import check_notebook
+    from boar.testing import assert_notebook
 
     # When / Then
-    check_notebook("my_favorite.ipynb", verbose=True)
+    assert_notebook("my_favorite.ipynb", verbose=True)
 ```
 
 Other examples are presented at: [./tests/test_testing_e2e.py](https://github.com/alexandreCameron/boar/blob/master/tests/test_testing_e2e.py)

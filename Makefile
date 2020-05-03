@@ -86,6 +86,7 @@ test-pytest:  ## Launch python tests
 	@echo "+++test-pytest:"
 	${PYTEST} ${TEST_PATH} -m "ut"
 	${PYTEST} ${TEST_PATH} -m "e2e"
+	${PYTEST} ${TEST_PATH} -m "tuto"
 .PHONY: test-pytest
 
 tests-python:  ## Launch all python tests
