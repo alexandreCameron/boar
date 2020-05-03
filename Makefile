@@ -8,7 +8,7 @@ help: ## Help recipies listing all the recipies of Makefile
 # Install python
 # --------------
 
-install-python:  ## Install python dependencies on azure feed or pypi repo
+install-python:  ## Install python dependencies
 	@echo "+++install:"
 	${PIP} install --no-cache-dir -r requirements/${ENV_REQUIREMENTS}.txt
 	${PIP} install --no-cache-dir -e .
@@ -17,7 +17,7 @@ install-python:  ## Install python dependencies on azure feed or pypi repo
 # Commitlint
 # ----------
 
-install-commitlint:  ## Install node dependencies for commitlint
+install-commitlint:  ## Install commitlint dependencies 
 	@echo "+++install-commitlint:"
 	@echo "On local machine use sudo to install dependencies"
 	@if [ $(node -v) ]; then\
@@ -36,16 +36,24 @@ commitlint:  ## Launch commitlint
 # Markdown lint
 # -------------
 
-install-markdownlint:
+install-markdownlint:  ## Install markdownlint dependencies 
 	@echo "+++install-markdown-lint:"
 	npm install -g markdownlint-cli
 .PHONY: install-markdown-lint
 
-markdownlint:
+markdownlint:  ## Launch markdown lint
 	@echo "+++markdown-lint:"
 	markdownlint '*.md' --config .markdownlint.json
 .PHONY: markdown-lint
 
+
+# JS-lint
+# -------
+
+lints-js:  ## Run JS lints
+	${MAKE} commitlint
+	${MAKE} markdownlint
+.PHONY: lints-js
 
 # ============
 # Python tests
@@ -68,8 +76,6 @@ convert-md2rst:  ## Convert markdown to rst for the doc
 
 build-doc:  ##  Build python documentation using sphinx
 	@echo "+++build-doc:"
-	${MAKE} convert-md2rst FILE="USAGE"
-	${MAKE} convert-md2rst FILE="README"
 	sphinx-build -T -E -b readthedocs -d ${DOC_PATH}/.build/doctrees-readthedocs -D language=en ${DOC_PATH}/ ${DOC_PATH}/.build/html
 .PHONY: build-doc
 
@@ -82,15 +88,25 @@ test-pytest:  ## Launch python tests
 	${PYTEST} ${TEST_PATH} -m "e2e"
 .PHONY: test-pytest
 
-tests-pytest:  ## Launch all  python tests
+tests-python:  ## Launch all python tests
 	@echo "+++tests:"
 	${MAKE} test-flake8
 	${MAKE} build-doc
 	${MAKE} test-pytest
-.PHONY: tests-pytest
+.PHONY: tests-python
 
+# =====
+# Tests
+# =====
+
+tests-all: ## Run all tests
+	${MAKE} lints-js
+	${MAKE} tests-python
+.PHONY: tests-all
+
+# =======
 # Release
-# -------
+# =======
 
 release:  ## Create wheel
 	@echo "+++release:"
