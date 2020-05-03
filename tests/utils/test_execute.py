@@ -13,7 +13,7 @@ def test_execute_by_block_return_correct_values(
 ):
     # Given
     from boar.utils.execute import execute_by_block
-    compact_source = ""
+    source_to_exec = ""
     start_tag, end_tag = "", ""
     splits = [{"code": "", "type": "export", "apply": False}]
     expected_diffs = {}
@@ -26,12 +26,12 @@ def test_execute_by_block_return_correct_values(
     mock_split_lines_by_block.return_value = splits
     mock_execute_python.return_value = expected_diffs
     expected_function_calls = [
-        call.mock_split_lines_by_block(compact_source, start_tag, end_tag),
+        call.mock_split_lines_by_block(source_to_exec, start_tag, end_tag),
         call.mock_execute_python(splits, variables),
     ]
 
     # When
-    diffs = execute_by_block(compact_source, start_tag, end_tag, variables)
+    diffs = execute_by_block(source_to_exec, start_tag, end_tag, variables)
 
     # Then
     assert mock_manager.mock_calls == expected_function_calls
@@ -47,7 +47,7 @@ def test_execute_by_line_return_correct_values(
 ):
     # Given
     from boar.utils.execute import execute_by_line
-    compact_source = ""
+    source_to_exec = ""
     line_tag = ""
     splits = [{"code": "", "type": "export", "apply": False}]
     expected_diffs = {}
@@ -60,12 +60,12 @@ def test_execute_by_line_return_correct_values(
     mock_split_lines_with_line_tag.return_value = splits
     mock_execute_python.return_value = expected_diffs
     expected_function_calls = [
-        call.mock_split_lines_with_line_tag(compact_source, line_tag),
+        call.mock_split_lines_with_line_tag(source_to_exec, line_tag),
         call.mock_execute_python(splits, variables),
     ]
 
     # When
-    diffs = execute_by_line(compact_source, line_tag, variables)
+    diffs = execute_by_line(source_to_exec, line_tag, variables)
 
     # Then
     assert mock_manager.mock_calls == expected_function_calls

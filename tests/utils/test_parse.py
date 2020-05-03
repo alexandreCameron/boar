@@ -7,7 +7,7 @@ from boar.__init__ import Notebook
 
 
 @pytest.mark.ut
-@pytest.mark.parametrize("notebook_path,expected_cells", [
+@pytest.mark.parametrize("notebook_path,expected_sources", [
     (Path(Notebook._00.value, "OK.ipynb"), [['print("OK")']]),
     (Path(Notebook._00.value, "AssertionError.ipynb"),
      [['print("AssertionError")\n', 'assert False']]),
@@ -22,35 +22,35 @@ from boar.__init__ import Notebook
       ['outputs_4 = {"e": EEE}\n', 'outputs_5 = {"f": FFF}  # export_line\n',
        'outputs_6 = {"g": GGG}']]),
 ])
-def test_get_notebook_cells_returns_correct_values(
+def test_parse_sources_returns_correct_values(
     notebook_path: Union[str, Path],
-    expected_cells: List[str],
+    expected_sources: List[str],
 ) -> None:
     # Given
-    from boar.utils.parse import get_notebook_cells
+    from boar.utils.parse import parse_sources
 
     # When
-    cells = get_notebook_cells(notebook_path)
+    sources = parse_sources(notebook_path)
 
     # Then
-    assert cells == expected_cells
+    assert sources == expected_sources
 
 
 @pytest.mark.ut
-@pytest.mark.parametrize("cell,expected_compact_source", [
+@pytest.mark.parametrize("cell,expected_source_to_exec", [
     (['print("OK")'], 'print("OK")'),
     (['print("AssertionError")\n', 'assert False'], 'print("AssertionError")\nassert False'),
     (['plt.show()'], "plt.draw(); plt.close('all')"),
 ])
-def test_parse_lines_returns_correct_values(
+def test_strap_source_in_one_line_returns_correct_values(
     cell: List[List[str]],
-    expected_compact_source: str,
+    expected_source_to_exec: str,
 ) -> None:
     # Given
-    from boar.utils.parse import parse_lines
+    from boar.utils.parse import strap_source_in_one_line
 
     # When
-    compact_source = parse_lines(cell)
+    source_to_exec = strap_source_in_one_line(cell)
 
     # Then
-    assert compact_source == expected_compact_source
+    assert source_to_exec == expected_source_to_exec

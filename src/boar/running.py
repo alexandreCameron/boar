@@ -5,7 +5,7 @@ from typing import Union
 
 from boar.__init__ import Tag, BoarError
 from boar.utils.log import (log_execution, close_plots)
-from boar.utils.parse import (get_notebook_cells, parse_lines)
+from boar.utils.parse import (parse_sources, strap_source_in_one_line)
 from boar.utils.execute import (execute_by_block, execute_by_line)
 from copy import deepcopy
 
@@ -37,57 +37,57 @@ def run_notebook(
     Raises
     ------
     BoarError
-        If `export*` and `skip*` tags in the same cell
+        If `export*` and `skip*` tags in the same source
     BoarError
-        If `*start` and `*line` tags in the same cell
+        If `*start` and `*line` tags in the same source
     """
     # Parse json
-    cells = get_notebook_cells(notebook_path)
+    sources = parse_sources(notebook_path)
 
     # Run set new inputs
     locals().update(inputs)
 
     # Run Code
     outputs = {}
-    for cell_index, cell in enumerate(cells):
-        # Parse cell lines for execution
-        compact_source = parse_lines(cell)
-        log_execution(cell_index, compact_source, verbose=verbose)
+    for cell_index, source in enumerate(sources):
+        # Parse source lines for execution
+        source_to_exec = strap_source_in_one_line(source)
+        log_execution(cell_index, source_to_exec, verbose=verbose)
 
         # Run, if no export tag
-        if (Tag.EXPORT.value not in compact_source) and (Tag.SKIP.value not in compact_source):
-            exec(compact_source)
+        if (Tag.EXPORT.value not in source_to_exec) and (Tag.SKIP.value not in source_to_exec):
+            exec(source_to_exec)
             continue
 
         # Raise error if too different tag type
-        if (Tag.EXPORT.value in compact_source) and (Tag.SKIP.value in compact_source):
+        if (Tag.EXPORT.value in source_to_exec) and (Tag.SKIP.value in source_to_exec):
             msg = f"`{Tag.EXPORT.value}*` and `{Tag.EXPORT.value}*` cannot be in same cell."
             raise BoarError(msg)
 
         # Define tags
-        if (Tag.EXPORT.value in compact_source):
+        if (Tag.EXPORT.value in source_to_exec):
             start_tag = Tag.EXPORT_START.value
             end_tag = Tag.EXPORT_END.value
             line_tag = Tag.EXPORT_LINE.value
 
-        if (Tag.SKIP.value in compact_source):
+        if (Tag.SKIP.value in source_to_exec):
             start_tag = Tag.SKIP_START.value
             end_tag = Tag.SKIP_END.value
             line_tag = Tag.SKIP_LINE.value
 
         # Raise error if incompatible extensions
-        if (start_tag in compact_source) and (line_tag in compact_source):
+        if (start_tag in source_to_exec) and (line_tag in source_to_exec):
             msg = f"`{start_tag}` and `{line_tag}` cannot be in same cell."
             raise BoarError(msg)
 
         # Executre python code
-        if start_tag in compact_source:
-            diffs = execute_by_block(compact_source, start_tag, end_tag, locals())
+        if start_tag in source_to_exec:
+            diffs = execute_by_block(source_to_exec, start_tag, end_tag, locals())
             outputs.update(diffs)
             continue
 
-        if line_tag in compact_source:
-            diffs = execute_by_line(compact_source, line_tag, locals())
+        if line_tag in source_to_exec:
+            diffs = execute_by_line(source_to_exec, line_tag, locals())
             outputs.update(diffs)
             continue
 
