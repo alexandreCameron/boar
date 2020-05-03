@@ -14,8 +14,8 @@ from boar.__init__ import Notebook, BoarError
         '/home/alex/Desktop/github/boar/notebook/02-lint/1-execution.ipynb',
         '/home/alex/Desktop/github/boar/notebook/02-lint/level-1/one-execution.ipynb',
         '/home/alex/Desktop/github/boar/notebook/02-lint/unstructured-executions.ipynb',
-     ]
-     ),
+     ]),
+    (Notebook._00.value, [])
 ])
 def test_lint_notebook_returns_correct_values(
     notebook_path: Path,
@@ -34,8 +34,6 @@ def test_lint_notebook_returns_correct_values(
     )
 
     # Then
-    print(incorrect_lint_files)
-
     assert incorrect_lint_files == expected_incorrect_lint_files
 
 

@@ -10,8 +10,13 @@ def lint_notebook(
     notebook_path: Path,
     verbose: Any,
     recursion_level: int = 0,
+    max_recursion: Union[int, None] = None,
 ) -> List[str]:
     incorrect_files = []
+
+    # If max recursion
+    if (max_recursion is not None) and (recursion_level >= max_recursion):
+        return incorrect_files
 
     # If notebook
     if notebook_path.suffix == ".ipynb":
@@ -19,7 +24,7 @@ def lint_notebook(
 
     # If directory
     if notebook_path.is_dir():
-        incorrect_files.extend(lint_dir(notebook_path, verbose, recursion_level+1))
+        incorrect_files.extend(lint_dir(notebook_path, verbose, recursion_level+1, max_recursion))
 
     incorrect_lint_files = [name for name in incorrect_files if name is not None]
 
@@ -38,13 +43,14 @@ def lint_dir(
     dir_path: Path,
     verbose: Any,
     recursion_level: int,
+    max_recursion: Union[int, None] = None,
 ) -> List[str]:
     incorrect_files = []
     for sub_path in sorted(dir_path.iterdir()):
         if sub_path.name == ".ipynb_checkpoints":
             continue
         if sub_path.is_dir() or sub_path.suffix == ".ipynb":
-            incorrect_subs = lint_notebook(sub_path, verbose, recursion_level)
+            incorrect_subs = lint_notebook(sub_path, verbose, recursion_level, max_recursion)
             incorrect_files.extend(incorrect_subs)
     return incorrect_files
 
