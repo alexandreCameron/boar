@@ -3,6 +3,8 @@ import json
 
 from typing import Union, List, Dict
 
+from boar.__init__ import BoarError
+
 
 def parse_sources(notebook_path: Union[str, Path]) -> List[List[str]]:
     return parse_codes(notebook_path, key="source")
@@ -18,6 +20,9 @@ def parse_codes(
         return [cell for cell in content["cells"] if cell["cell_type"] == "code"]
     if key in ["execution_count", "metadata", "outputs", "source"]:
         return [cell[key] for cell in content["cells"] if cell["cell_type"] == "code"]
+    else: 
+        msg = f"{key} is an invalid key for notebook parsing."
+        raise BoarError(msg)
 
 
 def strap_source_in_one_line(cell: List[str]) -> str:
