@@ -8,6 +8,7 @@ from boar.__init__ import Notebook
 @pytest.mark.parametrize("notebook_path", [
     Path(Notebook.MAIN.value, "00-test-tutorial.ipynb"),
     Path(Notebook.MAIN.value, "01-io-tutorial.ipynb"),
+    Path(Notebook.MAIN.value, "02-lint-tutorial.ipynb"),
 ])
 def test_tuto_runs_without_error(notebook_path: Path) -> None:
     # Given

@@ -1,4 +1,4 @@
-from typing import Union
+from typing import List, Tuple, Any
 import logging
 
 from boar.__init__ import BoarError
@@ -6,9 +6,33 @@ from boar.__init__ import BoarError
 
 def log_execution(
     cell_index: int,
-    source_to_exec: str,
-    verbose: Union[bool, object],
+    msg: str,
+    verbose: Any,
 ) -> None:
+    logger_print = get_logger_print(verbose)
+    logger_print(50*"-")
+    logger_print(f"Cell {cell_index}")
+    logger_print(50*"-")
+    logger_print(msg)
+    logger_print("\n")
+
+
+def log_lint(
+    file_posix: str,
+    cell_counts: List[Tuple[int]],
+    verbose: Any,
+) -> None:
+    logger_print = get_logger_print(verbose)
+    logger_print(50*"-")
+    logger_print(file_posix)
+    logger_print(50*"-")
+    for cell_count in cell_counts:
+        msg = f"Cell: {cell_count[0]} , execution_count: {cell_count[1]}"
+        logger_print(msg)
+    logger_print("\n")
+
+
+def get_logger_print(verbose: Any):
     logger_print = (lambda x: None)
     if isinstance(verbose, bool):
         logger_print = print if verbose else logging.info
@@ -17,12 +41,7 @@ def log_execution(
     else:
         msg = f"Undefined verbose: `{verbose}`."
         raise BoarError(msg)
-
-    logger_print(50*"-")
-    logger_print(f"Cell {cell_index}")
-    logger_print(50*"-")
-    logger_print(source_to_exec)
-    logger_print("\n")
+    return logger_print
 
 
 def close_plots():

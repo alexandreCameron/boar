@@ -7,7 +7,6 @@ from typing import Union, List
 from boar.__init__ import Notebook
 
 
-
 @pytest.mark.ut
 @patch("boar.utils.parse.parse_ipynb")
 @pytest.mark.parametrize("selection", [
@@ -19,9 +18,11 @@ def test_get_funcs_calls_functions_in_order(
 ) -> None:
     # Given
     if selection == "source":
-        from boar.utils.parse import get_code_sources as get_func
+        from boar.utils.parse import get_code_sources
+        get_func = get_code_sources
     if selection == "execution_count":
-        from boar.utils.parse import get_code_execution_counts as get_func
+        from boar.utils.parse import get_code_execution_counts
+        get_func = get_code_execution_counts
     expected_outputs = []
     notebook_path = "my_favorite_notebook.ipynb"
     projection = "code"

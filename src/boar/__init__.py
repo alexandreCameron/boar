@@ -25,6 +25,7 @@ class Notebook(Enum):
     MAIN = Path(ROOT_PATH, "notebook")
     _00 = Path(MAIN, "00-test")
     _01 = Path(MAIN, "01-io")
+    _02 = Path(MAIN, "02-lint")
 
 
 class BoarError(Exception):
