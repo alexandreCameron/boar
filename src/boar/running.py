@@ -5,7 +5,7 @@ from typing import Union
 
 from boar.__init__ import Tag, BoarError
 from boar.utils.log import (log_execution, close_plots)
-from boar.utils.parse import (parse_sources, strap_source_in_one_line)
+from boar.utils.parse import (get_code_sources, strap_source_in_one_line)
 from boar.utils.execute import (execute_by_block, execute_by_line)
 from copy import deepcopy
 
@@ -42,7 +42,7 @@ def run_notebook(
         If `*start` and `*line` tags in the same source
     """
     # Parse json
-    sources = parse_sources(notebook_path)
+    sources = get_code_sources(notebook_path)
 
     # Run set new inputs
     locals().update(inputs)

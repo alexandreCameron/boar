@@ -9,28 +9,41 @@ from boar.__init__ import Notebook
 
 
 @pytest.mark.ut
-@patch("boar.utils.parse.parse_codes")
-def test_parse_sources_calls_functions_in_order(mock_parse_codes) -> None:
+@patch("boar.utils.parse.parse_ipynb")
+@pytest.mark.parametrize("selection", [
+    ("source"), ("execution_count"),
+])
+def test_get_funcs_calls_functions_in_order(
+    mock_parse_ipynb,
+    selection: str,
+) -> None:
     # Given
-    from boar.utils.parse import parse_sources
-    expected_sources = []
+    if selection == "source":
+        from boar.utils.parse import get_code_sources as get_func
+    if selection == "execution_count":
+        from boar.utils.parse import get_code_execution_counts as get_func
+    expected_outputs = []
     notebook_path = "my_favorite_notebook.ipynb"
-    key = "source"
+    projection = "code"
 
     # Thus
     mock_manager = Mock()
-    mock_manager.attach_mock(mock_parse_codes, "mock_parse_codes")
-    mock_parse_codes.return_value = expected_sources
+    mock_manager.attach_mock(mock_parse_ipynb, "mock_parse_ipynb")
+    mock_parse_ipynb.return_value = expected_outputs
     expected_function_calls = [
-        call.mock_parse_codes(notebook_path, key=key),
+        call.mock_parse_ipynb(
+            notebook_path,
+            selection=selection,
+            projection=projection,
+        ),
     ]
 
     # When
-    sources = parse_sources(notebook_path)
+    outputs = get_func(notebook_path)
 
     # Then
     assert mock_manager.mock_calls == expected_function_calls
-    assert sources == expected_sources
+    assert outputs == expected_outputs
 
 
 @pytest.mark.ut
@@ -49,16 +62,17 @@ def test_parse_sources_calls_functions_in_order(mock_parse_codes) -> None:
       ['outputs_4 = {"e": EEE}\n', 'outputs_5 = {"f": FFF}  # export_line\n',
        'outputs_6 = {"g": GGG}']]),
 ])
-def test_parse_codes_returns_correct_values(
+def test_parse_ipynb_returns_correct_values(
     notebook_path: Union[str, Path],
     expected_sources: List[str],
 ) -> None:
     # Given
-    from boar.utils.parse import parse_codes
-    key = "source"
+    from boar.utils.parse import parse_ipynb
+    selection = "source"
+    projection = "code"
 
     # When
-    sources = parse_codes(notebook_path, key=key)
+    sources = parse_ipynb(notebook_path, selection=selection, projection=projection)
 
     # Then
     assert sources == expected_sources

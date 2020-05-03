@@ -6,23 +6,28 @@ from typing import Union, List, Dict
 from boar.__init__ import BoarError
 
 
-def parse_sources(notebook_path: Union[str, Path]) -> List[List[str]]:
-    return parse_codes(notebook_path, key="source")
+def get_code_sources(notebook_path: Union[str, Path]) -> List[List[str]]:
+    return parse_ipynb(notebook_path, selection="source", projection="code")
 
 
-def parse_codes(
+def get_code_execution_counts(notebook_path: Union[str, Path]) -> List[List[str]]:
+    return parse_ipynb(notebook_path, selection="execution_count", projection="code")
+
+
+def parse_ipynb(
     notebook_path: Union[str, Path],
-    key=None,
+    selection: Union[None, str] = None,
+    projection: str = "code",
 ) -> List[Union[List[str], Dict[str, List[str]]]]:
     with open(notebook_path, "r") as json_stream:
         content = json.load(json_stream)
-    if key is None:
+    if selection is None:
         return [cell for cell in content["cells"] if cell["cell_type"] == "code"]
-    if key in ["execution_count", "metadata", "outputs", "source"]:
-        return [cell[key] for cell in content["cells"] if cell["cell_type"] == "code"]
-    else: 
-        msg = f"{key} is an invalid key for notebook parsing."
-        raise BoarError(msg)
+    if selection in ["execution_count", "metadata", "outputs", "source"]:
+        return [cell[selection] for cell in content["cells"] if cell["cell_type"] == "code"]
+
+    msg = f"{selection} is an invalid selection for notebook parsing."
+    raise BoarError(msg)
 
 
 def strap_source_in_one_line(cell: List[str]) -> str:
