@@ -11,7 +11,7 @@ from boar.__init__ import Notebook
     (Path(Notebook._00.value, "OK.ipynb"), {}),
     (Path(Notebook.MAIN.value, "01-io-tutorial.ipynb"), {}),
     (Path(Notebook._01.value, "simple_outputs.ipynb"),
-     {'outputs_1': {'b': 'B'}, 'outputs_3': {'d': 2}, 'outputs_5': {'f': 78.56}}
+     {"outputs_1": {"b": "B"}, "outputs_3": {"d": 2}, "outputs_5": {"f": 78.56}}
      ),
 ])
 def test_run_notebook_exports_outputs(
@@ -42,7 +42,7 @@ def test_run_notebook_skips_line_and_used_inputs(
     # Given
     from boar.running import run_notebook
     notebook_path = Path(Notebook._01.value, "simple_inputs.ipynb")
-    expected_outputs = {'outputs': {'a': 0, 'b': new_value, 'c': 57}}
+    expected_outputs = {"outputs": {"a": 0, "b": new_value, "c": 57}}
     verbose = True
 
     # When

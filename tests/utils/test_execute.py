@@ -119,9 +119,9 @@ def test_execute_python_call_functions_in_order(
 @pytest.mark.ut
 @pytest.mark.parametrize("splits,expected_diffs", [
     ([{"code": "", "type": "export", "apply": True}], {}),
-    ([{"code": "a=1", "type": "export", "apply": True}], {'a': 1}),
-    ([{"code": "a=1\na=2", "type": "export", "apply": True}], {'a': 2}),
-    ([{"code": "a=1\nb=2", "type": "export", "apply": True}], {'a': 1, 'b': 2}),
+    ([{"code": "a=1", "type": "export", "apply": True}], {"a": 1}),
+    ([{"code": "a=1\na=2", "type": "export", "apply": True}], {"a": 2}),
+    ([{"code": "a=1\nb=2", "type": "export", "apply": True}], {"a": 1, "b": 2}),
 ])
 def test_execute_python_return_correct_values(
     splits: List[Dict[str, str]],
