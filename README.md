@@ -5,8 +5,10 @@ Dirty tricks to run python notebooks
 [![PyPI version](https://badge.fury.io/py/boar.svg)](https://badge.fury.io/py/boar)
 ![test](https://github.com/alexandreCameron/boar/workflows/test/badge.svg)
 [![Documentation Status](https://readthedocs.org/projects/boar/badge/?version=latest)](https://boar.readthedocs.io/en/latest/?badge=latest)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/alexandreCameron/boar/master)
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/boar)
 
 [![view image on github](./img/boar.jpg)](https://github.com/alexandreCameron/boar/blob/master/img/boar.jpg)
 
