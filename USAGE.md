@@ -28,13 +28,16 @@ To lint a notebook (or recursively on all notebooks in a directory), use:
 
 ```python
 from boar.linting import lint_notebook
-lint_notebook("my_favorite.ipynb", verbose=True)
+lint_notebook("my_favorite.ipynb", inline=False, verbose=True)
 ```
 
 ```python
 from boar.linting import lint_notebook
-lint_notebook("my_notebook_directory", verbose=True)
+lint_notebook("my_notebook_directory", inline=False, verbose=True)
 ```
+
+If the `inline` option is set to `True`, a linted verion of the the notebook will be saved.
+This version will have `outputs = []` and `execution_count = NOne`.
 
 Other examples are presented at: [./notebook/02-lint-tutorial.ipynb](https://github.com/alexandreCameron/boar/blob/master/notebook/02-lint-tutorial.ipynb)
 

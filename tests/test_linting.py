@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 from unittest.mock import patch, call, Mock
 
-from typing import List, Tuple, Union
+from typing import List, Tuple
 
 from boar.__init__ import Notebook
 
@@ -159,24 +159,3 @@ def test_lint_file_calls_functions_in_order(
     # Then
     assert mock_manager.mock_calls == expected_function_calls
     assert file_posix == expected_file_posix
-
-
-@pytest.mark.ut
-@pytest.mark.parametrize("counts,expected_cell_counts", [
-    ([None], []),
-    ([None, None, None], []),
-    ([None, 3, None], [(2, 3)]),
-
-])
-def test_get_cell_counts_returns_correct_values(
-    counts: List[Union[None, int]],
-    expected_cell_counts: List[Tuple[int, int]],
-) -> None:
-    # Given
-    from boar.linting import get_cell_counts
-
-    # When
-    cell_counts = get_cell_counts(counts)
-
-    # Then
-    assert cell_counts == expected_cell_counts
