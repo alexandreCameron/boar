@@ -12,9 +12,9 @@ from boar.__init__ import Notebook, BoarError
 @pytest.mark.parametrize("notebook_path,expected_incorrect_lint_files", [
     (Path(Notebook._02.value, "0-execution.ipynb"), []),
     (Notebook._02.value, [
-        'notebook/02-lint/1-execution.ipynb',
-        'notebook/02-lint/level-1/one-execution.ipynb',
-        'notebook/02-lint/unstructured-executions.ipynb',
+        "notebook/02-lint/1-execution.ipynb",
+        "notebook/02-lint/level-1/one-execution.ipynb",
+        "notebook/02-lint/unstructured-executions.ipynb",
      ]),
     (Notebook._00.value, [])
 ])

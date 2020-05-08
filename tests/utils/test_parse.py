@@ -131,31 +131,31 @@ def test_remove_output_returns_correct_values(
     file_path = Path(Notebook._02.value, "0-execution.ipynb")
     inline = False
     cells = [
-        {'cell_type': 'code', 'execution_count': None, 'metadata': {},
-         'outputs': [], 'source': ['a = 1\n', 'print(a)']},
-        {'cell_type': 'markdown', 'metadata': {}, 'source': ['---']}]
+        {"cell_type": "code", "execution_count": None, "metadata": {},
+         "outputs": [], "source": ["a = 1\n", "print(a)"]},
+        {"cell_type": "markdown", "metadata": {}, "source": ["---"]}]
     cleaned_cells = [
-        {'cell_type': 'code', 'metadata': {},
-         'source': ['a = 1\n', 'print(a)'], 'execution_count': None, 'outputs': []},
-        {'cell_type': 'markdown', 'metadata': {}, 'source': ['---']}]
+        {"cell_type": "code", "metadata": {},
+         "source": ["a = 1\n", "print(a)"], "execution_count": None, "outputs": []},
+        {"cell_type": "markdown", "metadata": {}, "source": ["---"]}]
     not_cells = {
-        'metadata': {
-            'kernelspec': {
-                'display_name': 'Python 3', 'language': 'python', 'name': 'python3'},
-            'language_info': {
-                'codemirror_mode': {'name': 'ipython', 'version': 3},
-                'file_extension': '.py',
-                'mimetype': 'text/x-python',
-                'name': 'python',
-                'nbconvert_exporter': 'python',
-                'pygments_lexer': 'ipython3',
-                'version': '3.8.0'}
+        "metadata": {
+            "kernelspec": {
+                "display_name": "Python 3", "language": "python", "name": "python3"},
+            "language_info": {
+                "codemirror_mode": {"name": "ipython", "version": 3},
+                "file_extension": ".py",
+                "mimetype": "text/x-python",
+                "name": "python",
+                "nbconvert_exporter": "python",
+                "pygments_lexer": "ipython3",
+                "version": "3.8.0"}
             },
-        'nbformat': 4,
-        'nbformat_minor': 4
+        "nbformat": 4,
+        "nbformat_minor": 4
 
     }
-    expected_cleaned_content = {'cells': cleaned_cells, **not_cells}
+    expected_cleaned_content = {"cells": cleaned_cells, **not_cells}
 
     # Thus
     mock_manager = Mock()
@@ -178,9 +178,9 @@ def test_remove_output_returns_correct_values(
 @pytest.mark.parametrize("cell,expected_cleaned_cell", [
     ({"cell_type": "not_code"}, {"cell_type": "not_code"}),
     ({"cell_type": "code"},
-     {"cell_type": "code", 'execution_count': None, 'outputs': []}),
-    ({"cell_type": "code", 'execution_count': 1, 'outputs': ["a"]},
-     {"cell_type": "code", 'execution_count': None, 'outputs': []}),
+     {"cell_type": "code", "execution_count": None, "outputs": []}),
+    ({"cell_type": "code", "execution_count": 1, "outputs": ["a"]},
+     {"cell_type": "code", "execution_count": None, "outputs": []}),
 ])
 def test_clean_cell_returns_correct_values(
     cell: dict,
