@@ -10,5 +10,5 @@ TEST_PATH := ./tests
 
 BRANCH_NAME ?= refs/heads/$(shell git rev-parse --abbrev-ref HEAD)
 PYTHON := $(if $(OS),python,python3)
-PYTEST := ${PYTHON} -m pytest -vvv --durations=0 --cov=src/boar
+PYTEST := ${PYTHON} -m pytest -vvv --durations=0 --cov=./
 PIP := pip
