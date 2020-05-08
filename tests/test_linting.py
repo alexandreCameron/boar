@@ -103,19 +103,25 @@ def test_lint_dir_call_functions_in_order(
 
 
 @pytest.mark.ut
+@patch("boar.linting.remove_output")
 @patch("boar.linting.log_lint")
 @patch("boar.linting.get_cell_counts")
 @patch("boar.linting.get_code_execution_counts")
-@pytest.mark.parametrize("cell_counts", [
-    [],
-    [(1, 1)],
-    [(1, 10)],
+@pytest.mark.parametrize("cell_counts,inline", [
+    [(), False],
+    [(1, 1), False],
+    [(1, 10), False],
+    [(), True],
+    [(1, 1), True],
+    [(1, 10), True],
 ])
 def test_lint_file_calls_functions_in_order(
     mock_get_code_execution_counts,
     mock_get_cell_counts,
     mock_log_lint,
+    mock_remove_output,
     cell_counts: List[Tuple[int, int]],
+    inline: bool,
 ) -> None:
     # Given
     from boar.linting import lint_file
@@ -123,7 +129,6 @@ def test_lint_file_calls_functions_in_order(
     is_incorrect_file = (cell_counts != [])
     expected_file_posix = file_path.as_posix() if is_incorrect_file else None
     counts = [None]
-    inline = False
     verbose = True
 
     # Thus
@@ -131,6 +136,7 @@ def test_lint_file_calls_functions_in_order(
     mock_manager.attach_mock(mock_get_code_execution_counts, "mock_get_code_execution_counts")
     mock_manager.attach_mock(mock_get_cell_counts, "mock_get_cell_counts")
     mock_manager.attach_mock(mock_log_lint, "mock_log_lint")
+    mock_manager.attach_mock(mock_remove_output, "mock_remove_output")
     mock_get_code_execution_counts.return_value = counts
     mock_get_cell_counts.return_value = cell_counts
     expected_function_calls = [
@@ -138,6 +144,11 @@ def test_lint_file_calls_functions_in_order(
         call.mock_get_cell_counts(counts)
     ]
     if is_incorrect_file:
+        if inline:
+            expected_function_calls.append(
+                call.mock_remove_output(file_path, inline)
+            )
+
         expected_function_calls.append(
             call.mock_log_lint(expected_file_posix, cell_counts, verbose)
         )
