@@ -8,7 +8,8 @@ def split_lines_by_block(
     start_tag: str,
     end_tag: str,
 ) -> List[Dict[str, Union[str, bool]]]:
-    tag_type = start_tag.split("_")[0].split("# ")[1]
+    print(source_to_split, start_tag, end_tag)
+    tag_type = start_tag.split("# ")[1].split("_")[0]
     start_splits = split_lines_with_block_tag(source_to_split, start_tag)
     end_splits = split_lines_with_block_tag(start_splits[1], end_tag)
 

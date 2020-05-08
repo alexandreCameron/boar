@@ -170,7 +170,6 @@ def test_remove_output_returns_correct_values(
     cleaned_content = remove_output(file_path, inline)
 
     # Then
-    print(cells)
     assert mock_manager.mock_calls == expected_function_calls
     assert cleaned_content == expected_cleaned_content
 

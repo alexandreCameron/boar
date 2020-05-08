@@ -82,11 +82,21 @@ build-doc:  ##  Build python documentation using sphinx
 # Unit tests
 # ----------
 
-test-pytest:  ## Launch python tests
-	@echo "+++test-pytest:"
-	${PYTEST} ${TEST_PATH} -m "ut" --cov-report=xml
+test-pytest-ut:  ## Launch pytest ut
+	${PYTEST} ${TEST_PATH} -m "ut"
+.PHONY: test-pytest-ut
+
+test-pytest-e2e:  ## Launch pytest e2e
 	${PYTEST} ${TEST_PATH} -m "e2e"
+.PHONY: test-pytest-e2e
+
+test-pytest-tuto:  ## Launch pytest tuto
 	${PYTEST} ${TEST_PATH} -m "tuto"
+.PHONY: test-pytest-tuto
+
+test-pytest:  ## Launch pytests
+	@echo "+++test-pytest:"
+	${PYTEST} ${TEST_PATH} --cov-report=xml
 .PHONY: test-pytest
 
 tests-python:  ## Launch all python tests
