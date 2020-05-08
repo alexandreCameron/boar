@@ -103,13 +103,13 @@ This is not the best way to put code in production but it can help out in some o
 
 ### Limits
 
-* Only the graphic package `matplotlib.pyplot` as been tested. Use other graphic option at your on risk.
+* Only the graphic package `matplotlib.pyplot` as been tested. Other graphic package may not give back the hand.
 
-* Only python code can be executed, donnot try to use the package on notebook with julia or R.
+* Only python code can be executed. The package will **not** work on julia or R notebooks.
 
 * When executing a notebook via `boar` make sure the environment has all the package to run the notebook.
 
-* The package has not been developped to work recursively. Use at your own risk.
+* The package has not been developped to work recursively.
 
 ### Forbidden synthax
 

@@ -6,10 +6,14 @@ from boar.__init__ import Notebook
 
 
 @pytest.mark.e2e
-def test_assert_notebook_runs_without_error() -> None:
+@pytest.mark.parametrize("notebook_name", [
+    "OK.ipynb",
+    "Matplotlib.ipynb",
+])
+def test_assert_notebook_runs_without_error(notebook_name) -> None:
     # Given
     from boar.testing import assert_notebook
-    notebook_path = Path(Notebook._00.value, "OK.ipynb")
+    notebook_path = Path(Notebook._00.value, notebook_name)
     verbose = True
 
     # When / Then
