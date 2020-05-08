@@ -6,6 +6,10 @@ from typing import Union, List, Dict
 from boar.__init__ import BoarError
 
 
+def get_cell_counts(counts):
+    return [(idx+1, count) for idx, count in enumerate(counts) if count is not None]
+
+
 def get_code_sources(notebook_path: Union[str, Path]) -> List[List[str]]:
     return parse_ipynb(notebook_path, selection="source", projection="code")
 

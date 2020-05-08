@@ -2,9 +2,30 @@ from pathlib import Path
 import pytest
 from unittest.mock import patch, call, Mock
 
-from typing import Union, List
+from typing import Union, List, Tuple
 
 from boar.__init__ import Notebook
+
+
+@pytest.mark.ut
+@pytest.mark.parametrize("counts,expected_cell_counts", [
+    ([None], []),
+    ([None, None, None], []),
+    ([None, 3, None], [(2, 3)]),
+
+])
+def test_get_cell_counts_returns_correct_values(
+    counts: List[Union[None, int]],
+    expected_cell_counts: List[Tuple[int, int]],
+) -> None:
+    # Given
+    from boar.utils.parse import get_cell_counts
+
+    # When
+    cell_counts = get_cell_counts(counts)
+
+    # Then
+    assert cell_counts == expected_cell_counts
 
 
 @pytest.mark.ut
