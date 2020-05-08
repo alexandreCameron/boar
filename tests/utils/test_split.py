@@ -6,6 +6,7 @@ from typing import List, Dict, Union
 from boar.__init__ import Tag
 
 
+@pytest.mark.ut
 @patch("boar.utils.split.split_lines_with_block_tag")
 def test_split_lines_by_block_calls_functions_in_order(
     mock_split_lines_with_block_tag,
@@ -15,11 +16,11 @@ def test_split_lines_by_block_calls_functions_in_order(
     source_to_split = "012"
     start_splits = ["0", "12"]
     end_splits = ["1", "2"]
-    start_tag, end_tag = "", ""
+    start_tag, end_tag = "# tag_start", "# tag_end"
     expected_splits = [
-        {"code": start_splits[0], "export": False},
-        {"code": end_splits[0], "export": True},
-        {"code": end_splits[1], "export": False},
+        {"apply": False, "code": "0", "type": "tag"},
+        {"apply": True, "code": "1", "type": "tag"},
+        {"apply": False, "code": "2", "type": "tag"},
     ]
 
     # Thus
@@ -65,15 +66,15 @@ def test_split_lines_with_block_tag_returns_correct_values(
 
 @pytest.mark.ut
 @pytest.mark.parametrize("source_to_split,expected_splits", [
-    (f"a", [{'apply': False, 'code': 'a', 'type': 'export'}]),
+    (f"a", [{"apply": False, "code": "a", "type": "export"}]),
     (f"b {Tag.EXPORT_LINE.value}",
-     [{'apply': False, 'code': '', 'type': 'export'},
-      {'apply': True, 'code': f'b {Tag.EXPORT_LINE.value}', 'type': 'export'},
-      {'apply': False, 'code': '', 'type': 'export'}]),
+     [{"apply": False, "code": "", "type": "export"},
+      {"apply": True, "code": f"b {Tag.EXPORT_LINE.value}", "type": "export"},
+      {"apply": False, "code": "", "type": "export"}]),
     (f"a\nb {Tag.EXPORT_LINE.value}\nc",
-     [{'apply': False, 'code': 'a', 'type': 'export'},
-      {'apply': True, 'code': f'b {Tag.EXPORT_LINE.value}', 'type': 'export'},
-      {'apply': False, 'code': 'c', 'type': 'export'}]),
+     [{"apply": False, "code": "a", "type": "export"},
+      {"apply": True, "code": f"b {Tag.EXPORT_LINE.value}", "type": "export"},
+      {"apply": False, "code": "c", "type": "export"}]),
 ])
 def test_split_lines_with_line_tag_returns_correct_value(
     source_to_split: str,
