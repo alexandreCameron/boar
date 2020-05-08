@@ -5,6 +5,7 @@ from typing import Union
 from boar.__init__ import Notebook
 
 
+@pytest.mark.filterwarnings("ignore::DeprecationWarning")
 @pytest.mark.e2e
 @pytest.mark.parametrize("notebook_name", [
     "OK.ipynb",
