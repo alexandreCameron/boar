@@ -53,7 +53,7 @@ def assert_error_notebook(
         Option to print more information, by default False
     """
     error_type, error_msg = get_error_notebook(notebook_path, verbose)
-    print(error_type, error_msg)
+
     assert error_type == expected_error_type
 
     if (error_type is None) or (expected_error_msg is None):

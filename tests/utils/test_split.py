@@ -60,7 +60,6 @@ def test_split_lines_with_block_tag_returns_correct_values(
     splits = split_lines_with_block_tag(source_to_split, start_tag)
 
     # Then
-    print(splits)
     assert splits == expected_splits
 
 
