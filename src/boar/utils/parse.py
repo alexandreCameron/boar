@@ -32,6 +32,13 @@ def parse_ipynb(
 
 def strap_source_in_one_line(cell: List[str]) -> str:
     lines = [line.replace("plt.show()", "plt.draw(); plt.close('all')") for line in cell]
-    sources = [line for line in lines if not (line.startswith("%") or line.startswith("!"))]
+    sources = []
+    for line in lines:
+        line_no_space = line.replace(" ", "")
+        if line_no_space.startswith("%"):
+            continue
+        if line_no_space.startswith("!"):
+            continue
+        sources.append(line)
     source_to_exec = "".join(sources)
     return source_to_exec
