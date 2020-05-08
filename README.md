@@ -6,6 +6,7 @@ Dirty tricks to run python notebooks
 ![test](https://github.com/alexandreCameron/boar/workflows/test/badge.svg)
 [![Documentation Status](https://readthedocs.org/projects/boar/badge/?version=latest)](https://boar.readthedocs.io/en/latest/?badge=latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/alexandreCameron/boar/master)
 
 [![view image on github](./img/boar.jpg)](https://github.com/alexandreCameron/boar/blob/master/img/boar.jpg)
 
