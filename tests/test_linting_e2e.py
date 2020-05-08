@@ -23,12 +23,14 @@ def test_lint_notebook_returns_correct_values(
 ):
     # Given
     from boar.linting import lint_notebook
+    inline = False
     verbose = False
     recursion_level = -1000
 
     # When
     incorrect_lint_files = lint_notebook(
         notebook_path,
+        inline=inline,
         verbose=verbose,
         recursion_level=recursion_level
     )
@@ -47,10 +49,12 @@ def test_lint_notebook_returns_error_when_fail():
         f"/home/alex/Desktop/github/boar/notebook/02-lint/level-1/one-execution.ipynb\n" +
         f"/home/alex/Desktop/github/boar/notebook/02-lint/unstructured-executions.ipynb"
     )
+    inline = False
+    verbose = False
 
     # When
     try:
-        lint_notebook(Notebook._02.value, verbose=False)
+        lint_notebook(Notebook._02.value, inline=inline, verbose=verbose)
     except BoarError:
         _, error_msg, _ = exc_info()
         pass

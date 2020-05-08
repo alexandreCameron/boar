@@ -1,3 +1,4 @@
+from pathlib import Path
 import pytest
 from unittest.mock import patch, call, Mock
 
@@ -11,7 +12,7 @@ def test_run_notebook_calls_functions_in_order(
 ) -> None:
     # Given
     from boar.running import run_notebook
-    notebook_path = "my_notebook.ipynb"
+    notebook_path = Path("my_notebook.ipynb")
     sources = []
     expected_outputs = {}
 

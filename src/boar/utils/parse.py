@@ -42,3 +42,31 @@ def strap_source_in_one_line(cell: List[str]) -> str:
         sources.append(line)
     source_to_exec = "".join(sources)
     return source_to_exec
+
+
+def remove_output(file_path: Union[str, Path], inline: bool) -> Union[Dict, None]:
+    with open(file_path, "r") as json_stream:
+        content = json.load(json_stream)
+
+    cleaned_content = {}
+    cleaned_content["cells"] = [clean_cell(cell) for cell in content["cells"]]
+    cleaned_content.update({key: value for key, value in content.items() if key != "cells"})
+
+    if inline:
+        with open(file_path, "w+") as json_stream:
+            json.dump(cleaned_content, json_stream, indent=1)
+        return
+    return cleaned_content
+
+
+def clean_cell(cell: dict):
+    if cell["cell_type"] != "code":
+        return cell
+
+    cleaned_cell = {
+        key: value for key, value in cell.items()
+        if key not in ["execution_count", "outputs"]
+    }
+    cleaned_cell["execution_count"] = None
+    cleaned_cell["outputs"] = []
+    return cleaned_cell

@@ -19,6 +19,7 @@ def test_lint_notebook_call_functions_in_order_when_file(
     sub_path = next(dir_path.iterdir())
     expected_incorrect_lint_file = sub_path
     recursion_level = -1001
+    inline = False
     verbose = True
 
     # Thus
@@ -26,11 +27,13 @@ def test_lint_notebook_call_functions_in_order_when_file(
     mock_manager.attach_mock(mock_lint_file, "mock_lint_file")
     mock_lint_file.return_value = expected_incorrect_lint_file
     expected_function_calls = [
-        call.mock_lint_file(sub_path, verbose),
+        call.mock_lint_file(sub_path, inline, verbose),
     ]
 
     # When
-    incorrect_lint_files = lint_notebook(sub_path, verbose, recursion_level)
+    incorrect_lint_files = lint_notebook(
+        sub_path, inline, verbose, recursion_level
+    )
 
     # Then
     assert mock_manager.mock_calls == expected_function_calls
@@ -49,6 +52,7 @@ def test_lint_notebook_call_functions_in_order_when_dir(
     expected_incorrect_lint_files = [sub_path]
     recursion_level = -1001
     max_recursion = None
+    inline = False
     verbose = True
 
     # Thus
@@ -56,11 +60,11 @@ def test_lint_notebook_call_functions_in_order_when_dir(
     mock_manager.attach_mock(mock_lint_dir, "mock_lint_dir")
     mock_lint_dir.return_value = expected_incorrect_lint_files
     expected_function_calls = [
-        call.mock_lint_dir(dir_path, verbose, recursion_level+1, max_recursion),
+        call.mock_lint_dir(dir_path, inline, verbose, recursion_level+1, max_recursion),
     ]
 
     # When
-    incorrect_lint_files = lint_notebook(dir_path, verbose, recursion_level)
+    incorrect_lint_files = lint_notebook(dir_path, inline, verbose, recursion_level)
 
     # Then
     assert mock_manager.mock_calls == expected_function_calls
@@ -79,6 +83,7 @@ def test_lint_dir_call_functions_in_order(
     expected_incorrect_files = [sub_path]
     recursion_level = -1000
     max_recursion = None
+    inline = False
     verbose = True
 
     # Thus
@@ -86,11 +91,11 @@ def test_lint_dir_call_functions_in_order(
     mock_manager.attach_mock(mock_lint_notebook, "mock_lint_notebook")
     mock_lint_notebook.return_value = expected_incorrect_files
     expected_function_calls = [
-        call.mock_lint_notebook(sub_path, verbose, recursion_level, max_recursion),
+        call.mock_lint_notebook(sub_path, inline, verbose, recursion_level, max_recursion),
     ]
 
     # When
-    incorrect_files = lint_dir(dir_path, verbose, recursion_level)
+    incorrect_files = lint_dir(dir_path, inline, verbose, recursion_level)
 
     # Then
     assert mock_manager.mock_calls == expected_function_calls
@@ -106,7 +111,7 @@ def test_lint_dir_call_functions_in_order(
     [(1, 1)],
     [(1, 10)],
 ])
-def test_run_notebook_calls_functions_in_order(
+def test_lint_file_calls_functions_in_order(
     mock_get_code_execution_counts,
     mock_get_cell_counts,
     mock_log_lint,
@@ -114,10 +119,11 @@ def test_run_notebook_calls_functions_in_order(
 ) -> None:
     # Given
     from boar.linting import lint_file
-    file_path = "my_notebook.ipynb"
+    file_path = Path("my_notebook.ipynb")
     is_incorrect_file = (cell_counts != [])
-    expected_file_posix = file_path if is_incorrect_file else None
+    expected_file_posix = file_path.as_posix() if is_incorrect_file else None
     counts = [None]
+    inline = False
     verbose = True
 
     # Thus
@@ -137,7 +143,7 @@ def test_run_notebook_calls_functions_in_order(
         )
 
     # When
-    file_posix = lint_file(file_path, verbose)
+    file_posix = lint_file(file_path, inline, verbose)
 
     # Then
     assert mock_manager.mock_calls == expected_function_calls
