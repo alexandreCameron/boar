@@ -65,6 +65,7 @@ def assert_error_notebook(
     verbose: bool, optional
         Option to print more information, by default False
     """
+    notebook_path = check_is_notebook(notebook_path)
     error_type, error_msg = get_error_notebook(notebook_path, verbose)
     if error_type != expected_error_type:
         msg = f"{error_type} != {expected_error_type}"
