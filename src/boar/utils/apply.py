@@ -9,8 +9,8 @@ def apply_notebook(
     notebook_path: Union[str, Path],
     func_to_apply: FunctionType,
     error_label: str,
-    inline: bool = False,
     verbose: Any = True,
+    inline: bool = False,
     recursion_level: int = 0,
     max_recursion: Union[int, None] = None,
 ) -> List[str]:
@@ -32,8 +32,8 @@ def apply_notebook(
     # If directory
     if notebook_path.is_dir():
         incorrect_files.extend(apply_dir(
-            notebook_path, func_to_apply, error_label, inline,
-            verbose, recursion_level+1, max_recursion
+            notebook_path, func_to_apply, error_label,
+            verbose, inline, recursion_level+1, max_recursion
         ))
 
     incorrect_lint_files = [name for name in incorrect_files if name is not None]
@@ -53,8 +53,8 @@ def apply_dir(
     dir_path: Union[str, Path],
     func_to_apply: FunctionType,
     error_label: str,
-    inline: bool,
     verbose: Any,
+    inline: bool,
     recursion_level: int,
     max_recursion: Union[int, None] = None,
 ) -> List[str]:
@@ -65,8 +65,8 @@ def apply_dir(
             continue
         if sub_path.is_dir() or sub_path.suffix == ".ipynb":
             incorrect_subs = apply_notebook(
-                sub_path, func_to_apply, error_label, inline,
-                verbose, recursion_level, max_recursion
+                sub_path, func_to_apply, error_label,
+                verbose, inline, recursion_level, max_recursion
             )
             incorrect_files.extend(incorrect_subs)
     return incorrect_files

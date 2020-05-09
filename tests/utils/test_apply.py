@@ -34,13 +34,13 @@ def test_apply_notebook_call_functions_in_order_when_dir(
     mock_apply_dir.return_value = expected_incorrect_files
     expected_function_calls = [
         call.mock_apply_dir(
-            dir_path, func_to_apply, error_label, inline,
-            verbose, recursion_level+1, max_recursion),
+            dir_path, func_to_apply, error_label,
+            verbose, inline, recursion_level+1, max_recursion),
     ]
 
     # When
     incorrect_files = apply_notebook(
-        dir_path, func_to_apply, error_label, inline, verbose, recursion_level
+        dir_path, func_to_apply, error_label, verbose, inline, recursion_level
     )
 
     # Then
@@ -74,15 +74,15 @@ def test_apply_dir_call_functions_in_order(
     mock_apply_notebook.return_value = expected_incorrect_files
     expected_function_calls = [
         call.mock_apply_notebook(
-            sub_path, func_to_apply, error_label, inline,
-            verbose, recursion_level, max_recursion
+            sub_path, func_to_apply, error_label,
+            verbose, inline, recursion_level, max_recursion
         ),
     ]
 
     # When
     incorrect_files = apply_dir(
         dir_path, func_to_apply, error_label,
-        inline, verbose, recursion_level
+        verbose, inline, recursion_level
     )
 
     # Then

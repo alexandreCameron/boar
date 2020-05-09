@@ -23,15 +23,12 @@ def test_lint_notebook_call_functions_in_order_when_file(
     inline = False
     verbose = True
 
-    print(sub_path)
-    print(expected_incorrect_file)
-
     # Thus
     mock_manager = Mock()
     mock_manager.attach_mock(mock_lint_file, "mock_lint_file")
     mock_lint_file.return_value = expected_incorrect_file
     expected_function_calls = [
-        call.mock_lint_file(sub_path, error_label, inline, verbose),
+        call.mock_lint_file(sub_path, error_label, verbose, inline),
     ]
 
     # When
@@ -72,15 +69,15 @@ def test_lint_notebook_call_functions_in_order_when_dir(
             notebook_path=dir_path,
             func_to_apply=mock_lint_file,
             error_label=error_label,
-            inline=inline,
             verbose=verbose,
+            inline=inline,
             recursion_level=recursion_level,
             max_recursion=max_recursion,
         ),
     ]
 
     # When
-    incorrect_files = lint_notebook(dir_path, inline, verbose, recursion_level)
+    incorrect_files = lint_notebook(dir_path, verbose, inline, recursion_level)
 
     # Then
     assert mock_manager.mock_calls == expected_function_calls
@@ -150,7 +147,7 @@ def test_lint_file_calls_functions_in_order(
 
     # When
     try:
-        msg = lint_file(file_path, error_label, inline, verbose)
+        msg = lint_file(file_path, error_label, verbose, inline)
     except BoarError as err:  # noqa
         msg = str(err)
 
