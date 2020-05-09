@@ -4,8 +4,9 @@ from typing import Any, List, Union
 from boar.__init__ import BoarError, ErrorLabel
 from boar.utils.apply import apply_notebook
 from boar.utils.log import log_lint
-from boar.utils.parse import get_code_execution_counts, get_cell_counts, remove_output
-
+from boar.utils.parse import (
+    get_code_execution_counts, get_cell_counts, remove_output, check_is_notebook
+)
 
 def lint_notebook(
     notebook_path: Union[str, Path],
@@ -84,10 +85,7 @@ def lint_file(
     BoarError
         Notebook is not a file or not linted.
     """
-    file_path = Path(file_path)
-    if not (file_path.is_file() and file_path.suffix == ".ipynb"):
-        msg = f"{file_path} has invalid format."
-        raise BoarError(msg)
+    file_path = check_is_notebook(file_path)
     counts = get_code_execution_counts(file_path)
     cell_counts = get_cell_counts(counts)
     if cell_counts == []:

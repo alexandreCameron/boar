@@ -74,3 +74,11 @@ def clean_cell(cell: dict):
     cleaned_cell["execution_count"] = None
     cleaned_cell["outputs"] = []
     return cleaned_cell
+
+
+def check_is_notebook(file_path: Union[str, Path]):
+    file_path = Path(file_path)
+    if not (file_path.is_file() and file_path.suffix == ".ipynb"):
+        msg = f"{file_path} has invalid format."
+        raise BoarError(msg)
+    return file_path

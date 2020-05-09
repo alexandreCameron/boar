@@ -4,7 +4,7 @@ from unittest.mock import patch, call, Mock
 
 from typing import Union, List, Tuple
 
-from boar.__init__ import Notebook
+from boar.__init__ import Notebook, BoarError
 
 
 @pytest.mark.ut
@@ -194,3 +194,28 @@ def test_clean_cell_returns_correct_values(
 
     # Then
     assert cleaned_cell == expected_cleaned_cell
+
+
+@pytest.mark.ut
+@pytest.mark.parametrize("file_path,expected_status", [
+    ("", False),
+    ("fake.ipynb", False),
+    (Notebook.MAIN.value, False),
+    (next(Notebook.MAIN.value.iterdir()), True),
+])
+def test_check_is_notebook_raise_error(
+    file_path: Union[str, Path],
+    expected_status: bool,
+) -> None:
+    # Given
+    from boar.utils.parse import check_is_notebook
+    status = True
+
+    # When
+    try:
+        file_path = check_is_notebook(file_path)
+    except BoarError:
+        status = False
+
+    # Then
+    assert status == expected_status
