@@ -1,18 +1,20 @@
 from pathlib import Path
 from typing import Any, List, Union
 
-from boar.__init__ import BoarError, ErrorLabel
+from boar.__init__ import BoarError, ErrorLabel, VERBOSE, INLINE
 from boar.utils.apply import apply_notebook
 from boar.utils.log import log_lint
 from boar.utils.parse import (
     get_code_execution_counts, get_cell_counts, remove_output, check_is_notebook
 )
 
+ERROR_LABEL = ErrorLabel.LINT.value
+
 
 def lint_notebook(
     notebook_path: Union[str, Path],
-    verbose: Any = True,
-    inline: bool = False,
+    verbose: Any = VERBOSE,
+    inline: bool = INLINE,
     recursion_level: int = 0,
     max_recursion: Union[int, None] = None,
 ) -> List[str]:
@@ -48,7 +50,7 @@ def lint_notebook(
     incorrect_files = apply_notebook(
         notebook_path=notebook_path,
         func_to_apply=lint_file,
-        error_label=ErrorLabel.LINT.value,
+        error_label=ERROR_LABEL,
         verbose=verbose,
         func_params={"inline": inline},
         recursion_level=recursion_level,
@@ -59,9 +61,9 @@ def lint_notebook(
 
 def lint_file(
     file_path: Union[str, Path],
-    error_label: str,
-    verbose: Any,
-    inline: bool,
+    error_label: str = ERROR_LABEL,
+    verbose: Any = VERBOSE,
+    inline: bool = INLINE,
 ) -> Union[None, str]:
     """Lints one file.
 

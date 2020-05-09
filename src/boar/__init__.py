@@ -7,6 +7,9 @@ LIB_PATH = init_path.parents[0]
 ROOT_PATH = init_path.parents[2]
 TESTS_PATH = Path(ROOT_PATH, "tests")
 
+VERBOSE = True
+INLINE = False
+
 
 # Tags
 
