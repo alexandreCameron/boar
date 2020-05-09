@@ -2,14 +2,14 @@ from pathlib import Path
 from typing import Any, List, Union
 from types import FunctionType
 
-from boar.__init__ import BoarError
+from boar.__init__ import BoarError, VERBOSE
 
 
 def apply_notebook(
     notebook_path: Union[str, Path],
     func_to_apply: FunctionType,
     error_label: str,
-    verbose: Any = True,
+    verbose: Any = VERBOSE,
     func_params: dict = {},
     recursion_level: int = 0,
     max_recursion: Union[int, None] = None,
