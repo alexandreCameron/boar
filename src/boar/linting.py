@@ -8,10 +8,11 @@ from boar.utils.parse import (
     get_code_execution_counts, get_cell_counts, remove_output, check_is_notebook
 )
 
+
 def lint_notebook(
     notebook_path: Union[str, Path],
-    inline: bool = False,
     verbose: Any = True,
+    inline: bool = False,
     recursion_level: int = 0,
     max_recursion: Union[int, None] = None,
 ) -> List[str]:
@@ -24,10 +25,10 @@ def lint_notebook(
     ----------
     notebook_path : Union[str, Path]
         Notebook path or notebook directory
-    inline : bool, optional
-        Replace existing notebook with linted version, by default False
     verbose : Any, optional
         Verbosity option, by default True
+    inline : bool, optional
+        Replace existing notebook with linted version, by default False
     recursion_level : int, optional
         Level of recurssion, by default 0
         Set to -1000 if you wish to avoid raising Error
@@ -48,8 +49,8 @@ def lint_notebook(
         notebook_path=notebook_path,
         func_to_apply=lint_file,
         error_label=ErrorLabel.LINT.value,
-        inline=inline,
         verbose=verbose,
+        inline=inline,
         recursion_level=recursion_level,
         max_recursion=max_recursion,
     )
@@ -59,8 +60,8 @@ def lint_notebook(
 def lint_file(
     file_path: Union[str, Path],
     error_label: str,
+    verbose: Any,
     inline: bool,
-    verbose: Any
 ) -> Union[None, str]:
     """Lints one file.
 
@@ -70,10 +71,10 @@ def lint_file(
         Päth of the notebook, must be file
     error_label : str
         Name of the error
-    inline : bool
-        Replace existing notebook with linted version
     verbose : Any
         Verbosity option
+    inline : bool
+        Replace existing notebook with linted version
 
     Returns
     -------
