@@ -19,6 +19,8 @@ Testing an idea is sometimes more easily done by calling a python notebook in a 
 It is as dirty, filthy and ugly as a wild hairy swine with horns...
 But if you can prove the value of your idea, why not try it out immediatly with `boar`.
 
+Read more at [./POST.md](https://github.com/alexandreCameron/boar/blob/master/POST.md)
+
 ## Installation
 
 Requirements:

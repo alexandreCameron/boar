@@ -67,6 +67,7 @@ def export_md_in_rst(frad, export_subdir="docs"):
 
 _ = export_md_in_rst(frad="README")
 _ = export_md_in_rst(frad="USAGE")
+_ = export_md_in_rst(frad="POST")
 
 
 # -- General configuration ------------------------------------------------
