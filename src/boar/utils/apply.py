@@ -23,7 +23,11 @@ def apply_notebook(
 
     # If notebook
     if notebook_path.suffix == ".ipynb":
-        incorrect_files.append(func_to_apply(notebook_path, inline, verbose))
+        try:
+            file_posix = func_to_apply(notebook_path, error_label, inline, verbose)
+        except BoarError:
+            file_posix = Path(notebook_path).as_posix()
+        incorrect_files.append(file_posix)
 
     # If directory
     if notebook_path.is_dir():
