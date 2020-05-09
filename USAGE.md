@@ -117,6 +117,8 @@ Some synthax used in notebook can **not** be used with `boar`:
 
 * Magic command starting with `%%`, `!` or any command that cannot be used in a python file.
 
+Use `import pip ; pip.main(["install", "my-package"])`, to install package within the notebook instead of `! pip install my-package`
+
 * Variable, list, dictionary comprehension.
 
 ```python
