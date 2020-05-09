@@ -2,6 +2,7 @@
 boar-venv
 docs/README.rst
 docs/USAGE.rst
+docs/POST.rst
 
 # Notebook
 notebook/**/Untitled*.ipynb

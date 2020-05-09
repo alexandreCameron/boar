@@ -8,6 +8,7 @@ Table of content
 
    README.rst
    USAGE.rst
+   POST.rst
    boar-man.rst
 
 Index

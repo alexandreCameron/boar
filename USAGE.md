@@ -109,7 +109,7 @@ This is not the best way to put code in production but it can help out in some o
 
 * When executing a notebook via `boar` make sure the environment has all the package to run the notebook.
 
-* The package has not been developped to work recursively.
+* The package has not been developped to work recursively. Do not execute boar on notebooks that execute boar on other notebooks!
 
 ### Forbidden synthax
 
