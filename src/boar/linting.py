@@ -57,6 +57,7 @@ def lint_notebook(
 
 def lint_file(
     file_path: Union[str, Path],
+    error_label: str,
     inline: bool,
     verbose: Any
 ) -> Union[None, str]:
@@ -66,6 +67,8 @@ def lint_file(
     ----------
     file_path : Union[str, Path]
         Päth of the notebook, must be file
+    error_label : str
+        Name of the error
     inline : bool
         Replace existing notebook with linted version
     verbose : Any
@@ -79,7 +82,7 @@ def lint_file(
     Raises
     ------
     BoarError
-        Notebook is not a file.
+        Notebook is not a file or not linted.
     """
     file_path = Path(file_path)
     if not (file_path.is_file() and file_path.suffix == ".ipynb"):
@@ -90,9 +93,12 @@ def lint_file(
     if cell_counts == []:
         return None
 
-    if inline:
-        remove_output(file_path, inline)
-
     file_posix = Path(file_path).as_posix()
     log_lint(file_posix, cell_counts, verbose)
-    return file_posix
+
+    if inline:
+        remove_output(file_path, inline)
+        return file_posix
+
+    msg = f"{error_label}: {file_posix}"
+    raise BoarError(msg)
