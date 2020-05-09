@@ -20,20 +20,21 @@ def test_lint_notebook_call_functions_in_order_when_file(
     sub_path = next(dir_path.iterdir())
     expected_incorrect_file = sub_path
     recursion_level = -1001
-    inline = False
     verbose = True
+    inline = False
+    func_params = {"inline": inline}
 
     # Thus
     mock_manager = Mock()
     mock_manager.attach_mock(mock_lint_file, "mock_lint_file")
     mock_lint_file.return_value = expected_incorrect_file
     expected_function_calls = [
-        call.mock_lint_file(sub_path, error_label, verbose, inline),
+        call.mock_lint_file(sub_path, error_label, verbose, **func_params),
     ]
 
     # When
     incorrect_files = lint_notebook(
-        sub_path, inline, verbose, recursion_level
+        sub_path, verbose, inline, recursion_level
     )
 
     # Then
@@ -56,8 +57,9 @@ def test_lint_notebook_call_functions_in_order_when_dir(
     expected_incorrect_files = [sub_path]
     recursion_level = -1001
     max_recursion = None
-    inline = False
     verbose = True
+    inline = False
+    func_params = {"inline": inline}
 
     # Thus
     mock_manager = Mock()
@@ -70,7 +72,7 @@ def test_lint_notebook_call_functions_in_order_when_dir(
             func_to_apply=mock_lint_file,
             error_label=error_label,
             verbose=verbose,
-            inline=inline,
+            func_params=func_params,
             recursion_level=recursion_level,
             max_recursion=max_recursion,
         ),
