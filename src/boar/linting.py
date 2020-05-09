@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Any, List, Union
 
-from boar.__init__ import ErrorLabel
+from boar.__init__ import BoarError, ErrorLabel
 from boar.utils.apply import apply_notebook
 from boar.utils.log import log_lint
 from boar.utils.parse import get_code_execution_counts, get_cell_counts, remove_output
@@ -15,6 +15,9 @@ def lint_notebook(
     max_recursion: Union[int, None] = None,
 ) -> List[str]:
     """Lint notebook.
+
+    Applied on a directory, all the notebook will be lint down to the level
+    defined by `max_recursion`.
 
     Parameters
     ----------
@@ -57,7 +60,31 @@ def lint_file(
     inline: bool,
     verbose: Any
 ) -> Union[None, str]:
+    """Lints one file.
+
+    Parameters
+    ----------
+    file_path : Union[str, Path]
+        Päth of the notebook, must be file
+    inline : bool
+        Replace existing notebook with linted version
+    verbose : Any
+        Verbosity option
+
+    Returns
+    -------
+    Union[None, str]
+        Path in posix format if notebook fail else None
+
+    Raises
+    ------
+    BoarError
+        Notebook is not a file.
+    """
     file_path = Path(file_path)
+    if not (file_path.is_file() and file_path.suffix == ".ipynb"):
+        msg = f"{file_path} has invalid format."
+        raise BoarError(msg)
     counts = get_code_execution_counts(file_path)
     cell_counts = get_cell_counts(counts)
     if cell_counts == []:
