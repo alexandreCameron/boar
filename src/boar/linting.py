@@ -1,7 +1,8 @@
 from pathlib import Path
 from typing import Any, List, Union
 
-from boar.__init__ import BoarError
+from boar.__init__ import ErrorLabel
+from boar.utils.apply import apply_notebook
 from boar.utils.log import log_lint
 from boar.utils.parse import get_code_execution_counts, get_cell_counts, remove_output
 
@@ -39,53 +40,15 @@ def lint_notebook(
     BoarError
         At list one notebook as failed, the message will list all failed notebooks
     """
-    notebook_path = Path(notebook_path)
-    incorrect_files = []
-
-    # If max recursion
-    if (max_recursion is not None) and (recursion_level >= max_recursion):
-        return incorrect_files
-
-    # If notebook
-    if notebook_path.suffix == ".ipynb":
-        incorrect_files.append(lint_file(notebook_path, inline, verbose))
-
-    # If directory
-    if notebook_path.is_dir():
-        incorrect_files.extend(lint_dir(
-            notebook_path, inline, verbose, recursion_level+1, max_recursion
-        ))
-
-    incorrect_lint_files = [name for name in incorrect_files if name is not None]
-
-    if (recursion_level != 0):
-        return incorrect_lint_files
-
-    if incorrect_lint_files == []:
-        return None
-
-    incorrect_lint_str = "\n".join(incorrect_lint_files)
-    msg = f"Linting issues in:\n{incorrect_lint_str}"
-    raise BoarError(msg)
-
-
-def lint_dir(
-    dir_path: Union[str, Path],
-    inline: bool,
-    verbose: Any,
-    recursion_level: int,
-    max_recursion: Union[int, None] = None,
-) -> List[str]:
-    dir_path = Path(dir_path)
-    incorrect_files = []
-    for sub_path in sorted(dir_path.iterdir()):
-        if sub_path.name == ".ipynb_checkpoints":
-            continue
-        if sub_path.is_dir() or sub_path.suffix == ".ipynb":
-            incorrect_subs = lint_notebook(
-                sub_path, inline, verbose, recursion_level, max_recursion
-            )
-            incorrect_files.extend(incorrect_subs)
+    incorrect_files = apply_notebook(
+        notebook_path=notebook_path,
+        func_to_apply=lint_file,
+        error_label=ErrorLabel.LINT.value,
+        inline=inline,
+        verbose=verbose,
+        recursion_level=recursion_level,
+        max_recursion=max_recursion,
+    )
     return incorrect_files
 
 

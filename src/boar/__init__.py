@@ -28,6 +28,12 @@ class Notebook(Enum):
     _02 = Path(MAIN, "02-lint")
 
 
+class ErrorLabel(Enum):
+    LINT = "Linting"
+    ASSERT = "Assertion"
+    RUN = "Execution"
+
+
 class BoarError(Exception):
     pass
 

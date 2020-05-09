@@ -5,7 +5,7 @@ from unittest.mock import patch, call, Mock
 
 from typing import List, Tuple
 
-from boar.__init__ import Notebook
+from boar.__init__ import Notebook, ErrorLabel
 
 
 @pytest.mark.ut
@@ -31,25 +31,28 @@ def test_lint_notebook_call_functions_in_order_when_file(
     ]
 
     # When
-    incorrect_lint_files = lint_notebook(
+    incorrect_files = lint_notebook(
         sub_path, inline, verbose, recursion_level
     )
 
     # Then
     assert mock_manager.mock_calls == expected_function_calls
-    assert incorrect_lint_files == [expected_incorrect_lint_file]
+    assert incorrect_files == [expected_incorrect_lint_file]
 
 
 @pytest.mark.ut
-@patch("boar.linting.lint_dir")
+@patch("boar.linting.lint_file")
+@patch("boar.linting.apply_notebook")
 def test_lint_notebook_call_functions_in_order_when_dir(
-    mock_lint_dir,
+    mock_apply_notebook,
+    mock_lint_file,
 ) -> List[str]:
     # Given
     from boar.linting import lint_notebook
+    error_label = ErrorLabel.LINT.value
     dir_path = Path(Notebook._02.value, "level-1")
     sub_path = next(dir_path.iterdir())
-    expected_incorrect_lint_files = [sub_path]
+    expected_incorrect_files = [sub_path]
     recursion_level = -1001
     max_recursion = None
     inline = False
@@ -57,45 +60,23 @@ def test_lint_notebook_call_functions_in_order_when_dir(
 
     # Thus
     mock_manager = Mock()
-    mock_manager.attach_mock(mock_lint_dir, "mock_lint_dir")
-    mock_lint_dir.return_value = expected_incorrect_lint_files
+    mock_manager.attach_mock(mock_apply_notebook, "mock_apply_notebook")
+    mock_manager.attach_mock(mock_lint_file, "mock_lint_file")
+    mock_apply_notebook.return_value = expected_incorrect_files
     expected_function_calls = [
-        call.mock_lint_dir(dir_path, inline, verbose, recursion_level+1, max_recursion),
+        call.mock_apply_notebook(
+            notebook_path=dir_path,
+            func_to_apply=mock_lint_file,
+            error_label=error_label,
+            inline=inline,
+            verbose=verbose,
+            recursion_level=recursion_level,
+            max_recursion=max_recursion,
+        ),
     ]
 
     # When
-    incorrect_lint_files = lint_notebook(dir_path, inline, verbose, recursion_level)
-
-    # Then
-    assert mock_manager.mock_calls == expected_function_calls
-    assert incorrect_lint_files == expected_incorrect_lint_files
-
-
-@pytest.mark.ut
-@patch("boar.linting.lint_notebook")
-def test_lint_dir_call_functions_in_order(
-    mock_lint_notebook,
-) -> List[str]:
-    # Given
-    from boar.linting import lint_dir
-    dir_path = Path(Notebook._02.value, "level-1")
-    sub_path = next(dir_path.iterdir())
-    expected_incorrect_files = [sub_path]
-    recursion_level = -1000
-    max_recursion = None
-    inline = False
-    verbose = True
-
-    # Thus
-    mock_manager = Mock()
-    mock_manager.attach_mock(mock_lint_notebook, "mock_lint_notebook")
-    mock_lint_notebook.return_value = expected_incorrect_files
-    expected_function_calls = [
-        call.mock_lint_notebook(sub_path, inline, verbose, recursion_level, max_recursion),
-    ]
-
-    # When
-    incorrect_files = lint_dir(dir_path, inline, verbose, recursion_level)
+    incorrect_files = lint_notebook(dir_path, inline, verbose, recursion_level)
 
     # Then
     assert mock_manager.mock_calls == expected_function_calls
