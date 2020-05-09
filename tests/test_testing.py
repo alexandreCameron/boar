@@ -2,7 +2,57 @@ from pathlib import Path
 import pytest
 from unittest.mock import patch, call, Mock
 
-from boar.__init__ import Notebook
+from boar.__init__ import Notebook, ErrorLabel
+
+ERROR_LABEL = ErrorLabel.ASSERT.value
+
+
+@pytest.mark.ut
+@patch("boar.testing.assert_file")
+@patch("boar.testing.apply_notebook")
+def test_assert_notebook_calls_functions_in_order(
+    mock_apply_notebook,
+    mock_assert_file,
+) -> None:
+    # Given
+    from boar.testing import assert_notebook
+    notebook_path = Path(Notebook._00.value, "Assertion.ipynb")
+    expected_incorrect_files = [notebook_path.as_posix()]
+    error_label = ERROR_LABEL
+    verbose = True
+    recursion_level = 0
+    max_recursion = None
+    func_params = {}
+
+    # Thus
+    mock_manager = Mock()
+    mock_manager.attach_mock(mock_apply_notebook, "mock_apply_notebook")
+    mock_apply_notebook.return_value = expected_incorrect_files
+    expected_function_calls = [
+        call.mock_apply_notebook(
+            notebook_path=notebook_path,
+            func_to_apply=mock_assert_file,
+            error_label=error_label,
+            verbose=verbose,
+            func_params=func_params,
+            recursion_level=recursion_level,
+            max_recursion=max_recursion,
+        )
+    ]
+
+    # When
+    incorrect_files = assert_notebook(
+        notebook_path=notebook_path,
+        error_label=error_label,
+        verbose=verbose,
+        recursion_level=recursion_level,
+        max_recursion=max_recursion,
+    )
+
+    # Then
+    print(incorrect_files)
+    assert mock_manager.mock_calls == expected_function_calls
+    assert incorrect_files == expected_incorrect_files
 
 
 @pytest.mark.ut
@@ -17,6 +67,7 @@ def test_assert_file_calls_functions_in_order(
     notebook_path = Path(Notebook._00.value, "OK.ipynb")
     expected_error_type = None
     expected_error_msg = None
+    error_label = ERROR_LABEL
     verbose = True
 
     # Thus
@@ -31,6 +82,7 @@ def test_assert_file_calls_functions_in_order(
             notebook_path=notebook_path,
             expected_error_type=expected_error_type,
             expected_error_msg=expected_error_msg,
+            error_label=error_label,
             verbose=verbose,
             ),
     ]
@@ -57,6 +109,7 @@ def test_assert_error_notebook_calls_functions_in_order(
     notebook_path = Path(Notebook._00.value, "OK.ipynb")
     expected_error_type = None
     expected_error_msg = None
+    error_label = ERROR_LABEL
     verbose = True
 
     # Thus
@@ -75,6 +128,7 @@ def test_assert_error_notebook_calls_functions_in_order(
         notebook_path=notebook_path,
         expected_error_type=expected_error_type,
         expected_error_msg=expected_error_msg,
+        error_label=error_label,
         verbose=verbose,
     )
 

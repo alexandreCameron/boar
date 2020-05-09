@@ -34,7 +34,7 @@ def test_lint_notebook_call_functions_in_order_when_file(
 
     # When
     incorrect_files = lint_notebook(
-        sub_path, verbose, inline, recursion_level
+        sub_path, error_label, verbose, inline, recursion_level
     )
 
     # Then
@@ -53,7 +53,7 @@ def test_lint_notebook_call_functions_in_order_when_dir(
     from boar.linting import lint_notebook
     error_label = ErrorLabel.LINT.value
     dir_path = Path(Notebook._02.value, "level-1")
-    sub_path = next(dir_path.iterdir())
+    sub_path = next(dir_path.iterdir()).as_posix()
     expected_incorrect_files = [sub_path]
     recursion_level = -1001
     max_recursion = None
@@ -79,7 +79,9 @@ def test_lint_notebook_call_functions_in_order_when_dir(
     ]
 
     # When
-    incorrect_files = lint_notebook(dir_path, verbose, inline, recursion_level)
+    incorrect_files = lint_notebook(
+        dir_path, error_label, verbose, inline, recursion_level
+    )
 
     # Then
     assert mock_manager.mock_calls == expected_function_calls
