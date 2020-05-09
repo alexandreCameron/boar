@@ -201,7 +201,7 @@ def test_clean_cell_returns_correct_values(
     ("", False),
     ("fake.ipynb", False),
     (Notebook.MAIN.value, False),
-    (next(Notebook.MAIN.value.iterdir()), True),
+    ([fpath for fpath in Notebook._00.value.iterdir() if fpath.suffix == ".ipynb"][0], True),
 ])
 def test_check_is_notebook_raise_error(
     file_path: Union[str, Path],
