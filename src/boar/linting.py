@@ -50,7 +50,7 @@ def lint_notebook(
         func_to_apply=lint_file,
         error_label=ErrorLabel.LINT.value,
         verbose=verbose,
-        inline=inline,
+        func_params={"inline": inline},
         recursion_level=recursion_level,
         max_recursion=max_recursion,
     )

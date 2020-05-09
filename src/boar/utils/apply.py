@@ -10,7 +10,7 @@ def apply_notebook(
     func_to_apply: FunctionType,
     error_label: str,
     verbose: Any = True,
-    inline: bool = False,
+    func_params: dict = {},
     recursion_level: int = 0,
     max_recursion: Union[int, None] = None,
 ) -> List[str]:
@@ -24,7 +24,7 @@ def apply_notebook(
     # If notebook
     if notebook_path.suffix == ".ipynb":
         try:
-            file_posix = func_to_apply(notebook_path, error_label, inline, verbose)
+            file_posix = func_to_apply(notebook_path, error_label, verbose, **func_params)
         except BoarError:
             file_posix = Path(notebook_path).as_posix()
         incorrect_files.append(file_posix)
@@ -33,7 +33,7 @@ def apply_notebook(
     if notebook_path.is_dir():
         incorrect_files.extend(apply_dir(
             notebook_path, func_to_apply, error_label,
-            verbose, inline, recursion_level+1, max_recursion
+            verbose, func_params, recursion_level+1, max_recursion
         ))
 
     incorrect_lint_files = [name for name in incorrect_files if name is not None]
@@ -54,7 +54,7 @@ def apply_dir(
     func_to_apply: FunctionType,
     error_label: str,
     verbose: Any,
-    inline: bool,
+    func_params: dict,
     recursion_level: int,
     max_recursion: Union[int, None] = None,
 ) -> List[str]:
@@ -66,7 +66,7 @@ def apply_dir(
         if sub_path.is_dir() or sub_path.suffix == ".ipynb":
             incorrect_subs = apply_notebook(
                 sub_path, func_to_apply, error_label,
-                verbose, inline, recursion_level, max_recursion
+                verbose, func_params, recursion_level, max_recursion
             )
             incorrect_files.extend(incorrect_subs)
     return incorrect_files
