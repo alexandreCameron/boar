@@ -7,6 +7,7 @@ from boar.__init__ import BoarError
 from boar.running import run_notebook
 from boar.utils.parse import check_is_notebook
 
+
 def get_error_notebook(
     notebook_path: Union[str, Path],
     verbose: bool,
@@ -54,12 +55,16 @@ def assert_error_notebook(
         Option to print more information, by default False
     """
     error_type, error_msg = get_error_notebook(notebook_path, verbose)
-
-    assert error_type == expected_error_type
+    if error_type != expected_error_type:
+        msg = f"{error_type} != {expected_error_type}"
+        raise BoarError(msg)
 
     if (error_type is None) or (expected_error_msg is None):
         return
-    assert str(error_msg) == str(expected_error_msg)
+
+    if str(error_msg) != str(expected_error_msg):
+        msg = f"{str(error_msg)} != {str(expected_error_msg)}"
+        raise BoarError(msg)
 
 
 def assert_notebook(
