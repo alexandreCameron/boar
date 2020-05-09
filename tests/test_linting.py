@@ -106,7 +106,8 @@ def test_lint_file_calls_functions_in_order(
 ) -> None:
     # Given
     from boar.linting import lint_file
-    file_path = Path("my_notebook.ipynb")
+    file_path = next(Path(Notebook._02.value, "level-1").iterdir())
+    print()
     is_incorrect_file = (cell_counts != [])
     expected_file_posix = file_path.as_posix() if is_incorrect_file else None
     counts = [None]
