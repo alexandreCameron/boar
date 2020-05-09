@@ -70,11 +70,11 @@ def test_assert_error_notebook_calls_functions_in_order(
 
 @pytest.mark.ut
 @patch("boar.testing.assert_error_notebook")
-def test_assert_notebook_calls_functions_in_order(
+def test_assert_file_calls_functions_in_order(
     mock_assert_error_notebook,
 ) -> None:
     # Given
-    from boar.testing import assert_notebook
+    from boar.testing import assert_file
     notebook_path = Path(Notebook._00.value, "OK.ipynb")
     expected_error_type = None
     expected_error_msg = None
@@ -94,7 +94,7 @@ def test_assert_notebook_calls_functions_in_order(
     ]
 
     # When
-    assert_notebook(
+    assert_file(
         notebook_path=notebook_path,
         verbose=verbose,
     )

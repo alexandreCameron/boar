@@ -92,6 +92,7 @@ def test_lint_notebook_call_functions_in_order_when_dir(
 @patch("boar.linting.remove_output")
 @patch("boar.linting.get_cell_counts")
 @patch("boar.linting.get_code_execution_counts")
+@patch("boar.linting.check_is_notebook")
 @pytest.mark.parametrize("cell_counts,inline", [
     ([], False),
     ([(1, 1)], False),
@@ -101,6 +102,7 @@ def test_lint_notebook_call_functions_in_order_when_dir(
     ([(1, 10)], True),
 ])
 def test_lint_file_calls_functions_in_order(
+    mock_check_is_notebook,
     mock_get_code_execution_counts,
     mock_get_cell_counts,
     mock_remove_output,
@@ -124,13 +126,16 @@ def test_lint_file_calls_functions_in_order(
 
     # Thus
     mock_manager = Mock()
+    mock_manager.attach_mock(mock_check_is_notebook, "mock_check_is_notebook")
     mock_manager.attach_mock(mock_get_code_execution_counts, "mock_get_code_execution_counts")
     mock_manager.attach_mock(mock_get_cell_counts, "mock_get_cell_counts")
     mock_manager.attach_mock(mock_log_lint, "mock_log_lint")
     mock_manager.attach_mock(mock_remove_output, "mock_remove_output")
+    mock_check_is_notebook.return_value = file_path
     mock_get_code_execution_counts.return_value = counts
     mock_get_cell_counts.return_value = cell_counts
     expected_function_calls = [
+        call.mock_check_is_notebook(file_path),
         call.mock_get_code_execution_counts(file_path),
         call.mock_get_cell_counts(counts)
     ]

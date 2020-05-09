@@ -3,8 +3,9 @@ from sys import exc_info
 
 from typing import Tuple, Union
 
+from boar.__init__ import BoarError
 from boar.running import run_notebook
-
+from boar.utils.parse import check_is_notebook
 
 def get_error_notebook(
     notebook_path: Union[str, Path],
@@ -74,6 +75,23 @@ def assert_notebook(
     verbose: bool, optional
         Option to print more information, by default False
     """
+    assert_file(notebook_path, verbose)
+
+
+def assert_file(
+    notebook_path: Union[str, Path],
+    verbose: bool,
+) -> None:
+    """Check that notebook runs without error.
+
+    Parameters
+    ----------
+    notebook_path : Union[str, Path]
+        Path of notebook
+    verbose: bool, optional
+        Option to print more information, by default False
+    """
+    notebook_path = check_is_notebook(notebook_path)
     assert_error_notebook(
         notebook_path=notebook_path,
         expected_error_type=None,
