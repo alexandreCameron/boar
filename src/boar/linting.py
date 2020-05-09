@@ -13,6 +13,7 @@ ERROR_LABEL = ErrorLabel.LINT.value
 
 def lint_notebook(
     notebook_path: Union[str, Path],
+    error_label: str = ERROR_LABEL,
     verbose: Any = VERBOSE,
     inline: bool = INLINE,
     recursion_level: int = 0,
@@ -27,6 +28,8 @@ def lint_notebook(
     ----------
     notebook_path : Union[str, Path]
         Notebook path or notebook directory
+    error_label : str, optional
+        Name of the error
     verbose : Any, optional
         Verbosity option, by default True
     inline : bool, optional
@@ -71,11 +74,11 @@ def lint_file(
     ----------
     file_path : Union[str, Path]
         Päth of the notebook, must be file
-    error_label : str
+    error_label : str, optional
         Name of the error
-    verbose : Any
-        Verbosity option
-    inline : bool
+    verbose : Any, optional
+        Verbosity optional
+    inline : bool,optional
         Replace existing notebook with linted version
 
     Returns
