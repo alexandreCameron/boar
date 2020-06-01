@@ -1,6 +1,6 @@
 # Start testing your python notebooks
 
-## TL;DR : boar helps test notebook in CI pipelines
+## TL;DR : boar helps test notebooks in CI pipelines
 
 [https://github.com/alexandreCameron/boar](https://github.com/alexandreCameron/boar)
 

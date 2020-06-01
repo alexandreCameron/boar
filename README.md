@@ -9,7 +9,7 @@ Dirty tricks to run python notebooks
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/alexandreCameron/boar/master)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/boar)
+<!-- ![PyPI - Downloads](https://img.shields.io/pypi/dm/boar) -->
 
 [![view image on github](./img/boar.jpg)](https://github.com/alexandreCameron/boar/blob/master/img/boar.jpg)
 
@@ -46,6 +46,10 @@ I would not recommend relying this trick on a long term product.
 More information at [./USAGE.md](https://github.com/alexandreCameron/boar/blob/master/USAGE.md).
 
 ## Reference
+
+### Medium
+
+[https://medium.com/@alexandre.cameron/start-testing-your-python-notebooks-5903d917c3cb](https://medium.com/@alexandre.cameron/start-testing-your-python-notebooks-5903d917c3cb)
 
 ### Documentation
 
