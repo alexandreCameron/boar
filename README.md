@@ -1,5 +1,15 @@
 # Readme
 
+---
+
+## Warning
+
+This repository is no longer maintain please migrate to [testbook](https://github.com/nteract/testbook).
+
+[testbook](https://github.com/nteract/testbook) is better coded, offers more functionalities and has a wider community.
+
+---
+
 Dirty tricks to run python notebooks
 
 [![PyPI version](https://badge.fury.io/py/boar.svg)](https://badge.fury.io/py/boar)
