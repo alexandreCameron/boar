@@ -1,5 +1,5 @@
 -r test.txt
-ipython==7.13.0
+ipython==8.10.0
 ipython-pytest==0.0.1
 jupyter==1.0.0
 matplotlib==3.2.1
